@@ -1,0 +1,211 @@
+---
+title: "jobCategories_world"
+author: "Duc-Quang Nguyen"
+date: "19 April 2016"
+output: html_document
+---
+
+## Data
+
+[ILO](http://www.ilo.org/ilostat/faces/home/statisticaldata/bulk-download?_adf.ctrl-state=o2320bwuj_732&clean=true&_afrLoop=636926180993963)
+
+  * Countries: Germany, USA, France, Switzerland, United Kingdom, Russia, China, Japan, Brazil, India, Italy, Spain, Turkey
+  * Datasets -> Annual indicators -> "Employment by economic activity and occupation"
+  * "International Standard Classification of Occupations, 2008 (ISCO-08)"
+  
+  
+Bulk download -> [yearly indicators](http://www.ilo.org/ilostat-files/WEB_bulk_download/bulk_YI_EN.7z)
+
+
+```{r setup, echo=FALSE, message = F, include=FALSE}
+library(swiTheme)
+library(swiRcharts)
+library(dplyr)
+library(readr)
+library(tidyr)
+library(zoo)
+library(lubridate)
+library(shiny)
+
+processBulkDataFile <- F
+
+coutries.subsetl <- c('CHE', 'ESP', 'GBR', 'BRA', 'RUS', 'TUR', 'ITA', 'USA', 'FRA', 'JPN')
+coutries.subset <- c('CHE', 'ESP', 'GBR', 'RUS', 'ITA', 'FRA')
+
+```
+
+
+```{r readData, echo=FALSE, message = F, include=FALSE}
+if(processBulkDataFile) {
+  data.read <- read.csv("data/bulk_YI_EN.csv")
+  
+  data <- data.read %>% filter (Indicator_Label == "Employment by sex and occupation", Sex_Item_Code == "SEX_T") %>% 
+    select(-Lang, -Collection_Code, -Collection_Label, -Indicator_Code, -Indicator_Label, -Sex_Item_Code, -Sex_Item_Label,
+    -Classif4_Version_Item_Code, -Classif4_Version_Label, -Classif4_Item_Label, 
+    -Classif5_Version_Item_Code, Classif5_Version_Label,  -Classif5_Version_Item_Code) 
+
+  write.csv(data, file = "data/ILO_YI_employmentByEconomicActivityAndOccupation.csv", row.names = F)
+  
+}
+
+data <- read.csv("data/ILO_YI_employmentByEconomicActivityAndOccupation.csv", stringsAsFactors = F)
+# drop columns
+data <- data %>% select(-Classif2_Version_Item_Code, -Classif2_Version_Label, -Classif2_Item_Label, -Classif3_Version_Item_Code, -Classif3_Version_Label, -Classif3_Item_Label, -Classif5_Version_Label, -Classif5_Item_Label)
+
+# basic exploration
+unique(data$Classif1_Version_Label)
+
+unique(data$Classif1_Item_Label)
+
+```
+
+### Mine data
+
+#### Use aggregated occupation
+
+```{r mineagg}
+agg <- data %>% filter(Classif1_Version_Label == "Aggregate categories", 
+  Country_Code %in% c('FRA', 'DEU', 'ITA', 'ESP', 'CHE', 'GBR'))
+agg.startEnd <- agg %>% group_by(Country_Label, Country_Code) %>% summarise(tStart = min(Time)) %>% 
+  left_join(agg %>% group_by( Country_Label, Country_Code) %>% summarise(tEnd = max(Time)))
+
+agg <- agg %>% filter(Survey_Label == "EU Labour Force Survey")
+# drop columns
+agg <- agg %>% select(-Unit_Measure_Code, -Unit_Measure_Label, -Unit_Multiplier_Code, -Currency_Code, 
+    -Currency_Label, -Notes_Source_Code, -Survey_Code, -Notes_Source_Code, -Notes_Indicator_Code, -Notes_Indicator_Label)
+
+agg %>% group_by(Country_Label, Country_Code, Time) %>% summarise(length = length(Obs_Value)) %>% 
+  ungroup() %>% as.data.frame()
+
+agg %>% filter(Country_Label == "Switzerland", Time == 2009)
+
+
+total.present <- agg %>% group_by(Country_Label, Time) %>% summarise(isTotal = any(Classif1_Item_Label == "Total")) %>% 
+  ungroup() %>% select(isTotal) %>% unlist() %>% all()
+if(!total.present) stop("Total occupation is not present for every year and country!")
+
+# reshape to have TOTAL as an extra column
+agg <- agg %>%  group_by(Country_Label, Time) %>% mutate(total = max(Obs_Value)) %>% ungroup()
+
+ddd <- agg %>% filter(Classif1_Item_Label != "Total") %>% group_by(Country_Label, Time) %>% mutate(share = Obs_Value / total) %>% 
+  ungroup() %>% select (-Unit_Multiplier_Label, -Source_Code, -Source_Label, -Survey_Label) 
+
+ddd %>% #filter(!Classif1_Item_Label %in% c("Armed forces", "Not elsewhere classified")) %>% 
+  ggplot(aes(Time, share)) + geom_line(aes(colour = Country_Label, 
+    group = Country_Label), size = 0.7, alpha = 0.8) + ylab("% occupation") +
+  facet_wrap(~ Classif1_Item_Label, ncol = 3, scales = "free_x") + swi_theme()
+
+change <- ddd %>% group_by(Country_Label, Classif1_Item_Label) %>% 
+  summarise(pc.change = ((dplyr::last(Obs_Value) - dplyr::first(Obs_Value)) /  dplyr::first(Obs_Value)) * 100)
+
+change <-change %>% left_join(ddd %>% group_by(Country_Label, Classif1_Item_Label) %>% 
+  summarise(delta = (dplyr::last(share) - dplyr::first(share)) * 100 ))
+
+change <- change %>% left_join(ddd %>% group_by(Country_Label, Classif1_Item_Label) %>% 
+  summarise(timeStart =  dplyr::first(Time) )) 
+
+dw.change <- change %>% ungroup() %>% 
+  filter(!Classif1_Item_Label %in% c("Armed forces", "Not elsewhere classified")) %>%
+  select(-timeStart, -pc.change)
+#spread
+dw.change <- dw.change %>% spread(Country_Label, delta)
+
+write.csv(dw.change, "input/EU_aggregateOccupation_shareDelta.csv", row.names = F)
+
+
+```
+#### Combine ISCO-08 & ISCO-88
+
+```{r mine, echo=FALSE, message = F}
+isc <- data %>% filter(Classif1_Version_Label %in%  c("ISCO-88", "ISCO-08"), Country_Code %in% coutries.subset)
+
+
+isc.startEnd <- isc %>% group_by(Country_Label, Country_Code) %>% summarise(tStart = min(Time)) %>% 
+  left_join(isc %>% group_by( Country_Label, Country_Code) %>% summarise(tEnd = max(Time)))
+
+## create a new column classif to unify ISCO-08 & ISCO-88
+isc$classif <- as.factor(gsub("(OCU\\_ISCO08\\_|OCU\\_ISCO88\\_)", "", isc$Classif1_Version_Item_Code))
+# drop columns
+isc <- isc %>% select(-Unit_Measure_Code, -Unit_Measure_Label, -Unit_Multiplier_Code, -Currency_Code, 
+    -Currency_Label, -Notes_Source_Code, -Survey_Code, -Notes_Source_Code, -Notes_Indicator_Code, -Notes_Indicator_Label)
+# drop non-Labour force survey data source
+isc <- isc %>% filter(Source_Label == "Labour force survey")
+
+# For countries and year where isco-08 and isco-88 are present, keep only isco-08
+isco <- do.call(rbind, by(isc, list(isc$Country_Label, isc$Time), function(ii) {
+  tt <- length(unique(ii$Classif1_Version_Label))
+  if(tt >= 2) {
+    if(any(ii$Classif1_Version_Label == "ISCO-08")) {
+      ii %>% filter(Classif1_Version_Label == "ISCO-08")
+    } else {
+      stop("ISCO-08 not found")
+    }
+  } else {
+    ii
+  }
+}))
+
+# drop army jobs & non-Labour force survey
+isco <- isco %>% filter(!classif %in% c("0", "X"))
+
+# Check that for each country, there is only one observation
+test <- isco %>% group_by(Country_Label, Time) %>% summarise(length = length(Obs_Value)) %>% ungroup()
+as.data.frame(test)
+
+# manual check
+isco %>% filter(Country_Label == "Switzerland", Time %in% c(2008, 2009))
+isco %>% filter(Country_Label == "Turkey", Time %in% c(2008, 2009))
+
+# compute the share of each occupation out of the total
+total.present <- isco %>% group_by(Country_Label, Time) %>% summarise(isTotal = any(classif == "TOTAL")) %>% ungroup() %>% select(isTotal) %>% unlist() %>% all()
+if(!total.present) stop("TOTAL occupation is not present for every year and country!")
+
+# reshape to have TOTAL as an extra column
+isco <- isco %>%  group_by(Country_Label, Time) %>% mutate(total = max(Obs_Value)) %>% ungroup()
+
+data <- isco %>% filter(classif != "TOTAL") %>% group_by(Country_Label, Time) %>% mutate(share = Obs_Value / total) %>% 
+  ungroup() %>% select (-Unit_Multiplier_Label, -Source_Code, -Source_Label, -Survey_Label) 
+
+ggplot(data, aes(Time, share)) + geom_line(aes(colour = Country_Label, group = Country_Label), size = 1, alpha = 0.8) + ylab("% occupation") +
+  facet_wrap(~ classif, ncol = 3, scales = "free_x") + swi_theme()
+```
+** Big mess of a graphic! ** 
+ 
+#### Use only ISCO-08
+ 
+```{r mine2}
+isc.08 <- data %>% filter(Classif1_Version_Label == "ISCO-08", Country_Code %in% coutries.subsetl)
+isc.08.startEnd <- isc.08 %>% group_by(Country_Label, Country_Code) %>% summarise(tStart = min(Time)) %>%
+  left_join(isc.08 %>% group_by( Country_Label, Country_Code) %>% summarise(tEnd = max(Time)))
+
+isc.88 <- data %>% filter(Classif1_Version_Label == "ISCO-88", Country_Code %in% coutries.subsetl)
+isc.88.startEnd <- isc.88 %>% group_by(Country_Label, Country_Code) %>% summarise(tStart = min(Time)) %>%
+  left_join(isc.88 %>% group_by( Country_Label, Country_Code) %>% summarise(tEnd = max(Time)))
+
+isc.08 <- isc.08 %>% select(-Unit_Measure_Code, -Unit_Measure_Label, -Unit_Multiplier_Code, -Currency_Code, 
+    -Currency_Label, -Notes_Source_Code, -Survey_Code, -Notes_Source_Code, -Notes_Indicator_Code, -Notes_Indicator_Label)
+
+# drop army jobs & unknown & non-Labour force survey
+isc.08 <- isc.08 %>% filter(Source_Label == "Labour force survey") %>% filter(!Classif1_Version_Item_Code %in% c("OCU_ISCO08_0", "OCU_ISCO08_X"))
+
+# check
+isc.08 %>% group_by(Country_Label, Time) %>% summarise(length = length(Obs_Value)) %>% ungroup() %>% as.data.frame()
+
+
+# compute the share of each occupation out of the total
+total.present <- isc.08 %>% group_by(Country_Label, Time) %>% summarise(isTotal = any(Classif1_Version_Item_Code == "OCU_ISCO08_TOTAL")) %>% 
+  ungroup() %>% select(isTotal) %>% unlist() %>% all()
+if(!total.present) stop("TOTAL occupation is not present for every year and country!")
+
+# reshape to have TOTAL as an extra column
+isc.08 <- isc.08 %>%  group_by(Country_Label, Time) %>% mutate(total = max(Obs_Value)) %>% ungroup()
+
+dd <- isc.08 %>% filter(Classif1_Version_Item_Code != "OCU_ISCO08_TOTAL") %>% group_by(Country_Label, Time) %>% mutate(share = Obs_Value / total) %>% 
+  ungroup() %>% select (-Unit_Multiplier_Label, -Source_Code, -Source_Label, -Survey_Label) 
+
+ggplot(dd, aes(Time, share)) + geom_line(aes(colour = Country_Label, group = Country_Label), size = 1, alpha = 0.8) + ylab("% occupation") +
+  facet_wrap(~ Classif1_Version_Item_Code, ncol = 3, scales = "free_x") + swi_theme()
+
+
+
+```

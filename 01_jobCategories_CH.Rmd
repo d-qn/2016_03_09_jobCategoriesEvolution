@@ -1,0 +1,253 @@
+---
+title: "Job categories evolution"
+author: "Duc-Quang Nguyen"
+date: "09 March 2016"
+output: html_document
+---
+
+## Data
+
+### ESPA
+
+[Page de l'OFS](http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.html)
+* ESPA emplois [je-f-03.02.01.21.xls](http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100755.xls)
+ 
+ 
+ * In Excel
+    * Remove header, footer and blanks rows
+    * Discard the rows with Total (row 24 onwards)
+    * Save as CSV, tab-delimted, UTF-8
+  * Shape the data by adding column: nationalité and values: "suisse", "étranger"    
+
+### Useful link regarding categoies used
+
+[CITP-08](http://ec.europa.eu/eurostat/ramon/nomenclatures/index.cfm?TargetUrl=LST_NOM_DTL&StrNom=CL_ISCO08&StrLanguageCode=FR&IntPcKey=&StrLayoutCode=HIERARCHIC)
+
+### Other datasets of interest?!
+
+* [Emplois en équivalents plein temps par divisions économique](http://www.bfs.admin.ch/bfs/portal/fr/index/infothek/erhebungen__quellen/blank/blank/statistique_de_l_emploi/06.Document.64565.xls) 1991-2015, par secteur éncomique et sous-secteurs: restauration, assurances, ...
+
+* [Personnes actives occupées par sections économiques et selon la nationalité](http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls) assez similaire...
+
+* [ILO](http://www.ilo.org/ilostat/faces/home/statisticaldata/bulk-download?_adf.ctrl-state=o2320bwuj_732&clean=true&_afrLoop=636926180993963)
+
+  * Countries: Germany, USA, France, Switzerland, United Kingdom, Russia, China, Japan, Brazil, India, 
+  * "Employment by sex and occupation"
+  * "International Standard Classification of Occupations, 2008 (ISCO-08)"
+
+## Inspirations
+
+* [Economist video](https://www.facebook.com/TheEconomist/videos/10153994678594060/)
+* [La fin du travail ? SECO](http://dievolkswirtschaft.ch/fr/2015/10/2015-11-roulet/)
+
+
+## Key points
+
+* The fourth digital revolution is about to revolutionise labour amd threatens a large number of jobs. 
+* When looking at the evolution of occupation, swissinfo.ch observes that automation has already reshaped Swiss labour / destroyed numerous jobs
+* 
+* 
+
+
+se manifeste une certaine tendance à l’automatisation ; c’est le cas pour les employés de type administratif et les assembleurs
+
+industrial revolution
+replace workers
+
+
+computarisation and digitalisation 
+
+skills upgrade
+
+
+
+```{r setup, message = F, warning = F, include=FALSE}
+library(swiTheme)
+library(swiRcharts)
+library(dplyr)
+library(readr)
+library(tidyr)
+library(zoo)
+library(lubridate)
+library(shiny)
+```
+
+## Load data
+
+```{r}
+espa.file <- "input/je-f-03.02.01.21_cleaned_shaped.csv"
+trad.file <- "input/swiss job categories evolution - Sheet1.csv"
+
+####	Load data and shape
+
+## ESPA data
+e.read <- read.csv(espa.file, stringsAsFactor = F, check.names = F)
+# remove empty col
+e.read <- e.read[,-which(colnames(e.read) =="")]
+
+## Hack change the trimester colanmes to Q1, Q2, Q3 and Q4 after the year.
+ncolname <- ifelse(grepl("^I\\n", colnames(e.read)), 
+  paste0(gsub("^I\\n", "", colnames(e.read)), "Q1"),  colnames(e.read))
+ncolname <- ifelse(grepl("^II ?\\n", ncolname), 
+  paste0(gsub("^II ?\\n", "", ncolname), "Q2"),  ncolname)
+ncolname <- ifelse(grepl("^III\\n", ncolname), 
+  paste0(gsub("^III\\n", "", ncolname), "Q3"),  ncolname)
+ncolname <- ifelse(grepl("^IV\\n", ncolname), 
+  paste0(gsub("^IV\\n", "", ncolname), "Q4"),  ncolname)
+
+colnames(e.read) <- ncolname
+
+# make the data long
+espa <- do.call(rbind, by(e.read, e.read$nationalité, function(ee) {
+	cbind(ee %>% select(-nationalité) %>% tidyr::gather(année, valeur, -Total), nationalité = ee$nationalité[1])
+}))
+rownames(espa) <- NULL
+colnames(espa)[1] <- 'profession'
+
+# transform Q time to date
+espa$année <- as.Date(as.yearqtr(espa$année, format = "%YQ%q")) + months(3) -1
+
+## rbind
+espa$valeur <- as.numeric(espa$valeur)
+espa[which(is.na(espa$valeur)), "valeur"] <- 0
+espa$valeur  <- espa$valeur * 1000
+data <- espa
+
+### load translations
+txt <- read.csv(trad.file, row.names = 1, stringsAsFactors = F)
+
+# discard incomplete translations
+cidx <- unique(which(txt =="" | is.na(txt), T)[,2])
+if(length(cidx > 0)) {
+  warning(paste(colnames(txt)[cidx], collapse = "\t"), " languages will be discarded!", "\n")
+  txt <- txt[,-cidx, drop = F]
+}
+colnames(txt)
+
+data <- data %>% filter(profession  != "Sans indication/ne sait pas") 
+job.type <- sort(unique(data$profession))
+names(job.type) <- rownames(txt)[grep("\\.type$", rownames(txt))]
+# check mapping !
+job.type
+
+############################################################################################
+###		Shape more: make it yearly
+############################################################################################
+
+### Jobs overall ##
+jobs <- data %>%
+  group_by(profession, année) %>% dplyr::summarise(tot = sum(valeur, na.rm =T)) %>% ungroup ()
+
+jobs %>% ggplot(aes(x = année, y = tot)) + 
+  geom_line(size = 1, alpha = 0.9, colour = "#333366") + 
+  facet_wrap(~ profession, ncol = 3, scales = "free_x") + ylab("Emplois") + 
+  swi_theme()
+
+# reduce resolution to have it by year
+jobs %<>% group_by(profession) %>% mutate(year = as.numeric(format(année, "%Y")))
+jobsy <- jobs %>% group_by(profession, year) %>% dplyr::summarise(tot = last(tot))  %>% ungroup()                          
+jobsy <- jobsy %>% group_by(year) %>% mutate(yearlytot = sum(tot, na.rm = T)) %>% 
+  ungroup %>% group_by(year) %>%  mutate(perc = (tot/yearlytot) * 100) %>% ungroup()
+
+jobsy  %>% ggplot(aes(x = year, y = perc)) + 
+  geom_line(size = 1, alpha = 0.8, colour = "#663333") + ylab("% professions") +
+  facet_wrap(~ profession, ncol = 3, scales = "free_x") + swi_theme()
+
+# compute the % change by categories
+jobsy.delta <- jobsy %>% group_by(profession) %>% 
+  summarise(change = ((dplyr::last(tot) - dplyr::first(tot)) / dplyr::first(tot)) * 100) %>%
+  ungroup()
+
+jobsy.delta <- jobsy %>% group_by(profession) %>% 
+  summarise(abs.delta = dplyr::last(tot) - dplyr::first(tot)) %>%
+  ungroup() %>% left_join(jobsy.delta)
+
+jobsy.delta <- jobsy %>% group_by(profession) %>% 
+  summarise(pc.change = dplyr::last(perc) - dplyr::first(perc)) %>% 
+  ungroup() %>% left_join(jobsy.delta)
+
+jobsy.delta <- jobsy %>% group_by(profession) %>% 
+  summarise(pc.diff = (dplyr::last(perc) - dplyr::first(perc))  / dplyr::first(perc) * 100)  %>% 
+  ungroup() %>% left_join(jobsy.delta)
+
+
+knitr::kable(jobsy.delta, digits = 2, caption = "A table produced by printr.")
+############################################################################################
+###		Plot
+############################################################################################
+library(metricsgraphics)
+library(htmltools)
+
+
+lang <- 'FR'
+
+#for(lang in colnames(txt)) {
+
+  dd <- jobsy
+  
+  ### translations
+  # get the translations
+  dd$job.type <- names(job.type)[match(dd$profession, job.type)]
+  
+  axis.labels <- c(txt['x.label', lang], txt['y.label', lang])
+  colnames(dd)[which(colnames(dd) == "year")] <- axis.labels[1]
+  colnames(dd)[which(colnames(dd) == "perc")] <- axis.labels[2]
+  
+  job.title <- txt[names(job.type), lang]
+  names(job.title) <- names(job.type)
+  
+  footer <- paste0(
+    txt['source', lang], ": ", 
+    htmlLink(txt['source.link', lang], txt['source.name', lang]), " | ",
+    txt['code', lang], ": ", 
+    htmlLink(txt['code.link', lang], txt['code.name', lang]), " | swissinfo.ch"
+    )
+  
+  # get the job examples
+  descr <- txt[gsub("\\.type", "\\.ex", names(job.type)), lang]
+  names(descr) <- names(job.type)
+
+  jobsy.delta$col <- ifelse(jobsy.delta$pc.change > 0, "#336666", "#ab3d3f")
+  jobsy.delta$job.type <- names(job.type)[match(jobsy.delta$profession, job.type)]
+  
+  plots <- lapply(unique(dd$job.type), function(p) {
+    pc.delta <- jobsy.delta[which(jobsy.delta$job.type == p),'pc.change']
+    title <- paste0(as.character(job.title[p]), " (",
+              ifelse(pc.delta > 0, "+", ""), round(pc.delta)
+              ,"%)")
+    
+    mjs_plot(data = filter(dd, job.type == p), 
+             x = axis.labels[1], y = axis.labels[2],
+             width="100%", height="250px", decimals = 1, 
+             description = as.character(descr[p]),
+             left = 21, right = 9, bottom = 18, buffer = 0, top = 0, linked = F, 
+             title = title) %>%
+      mjs_line(area = TRUE, 
+        color = as.character(jobsy.delta[which(jobsy.delta$job.type == p),'col'])) %>%
+      mjs_axis_y(min_y = 0, max_y = max(dd[,axis.labels[2]], na.rm = T)) %>% 
+      mjs_axis_x(xax_count = 4) %>%
+      mjs_labs(x_label="")
+  })
+  
+  save_html(
+    fluidPage(
+      tags$h2(txt["main.title", lang]),
+      div(class = "descr", txt["descr", lang]),
+      div(class="graphic", 
+          fluidRow(lapply(1:length(plots), function(i) {
+            column(4, plots[[i]])
+          })
+          ),
+          div(id = "cite", HTML(footer))
+      )
+    ), #background = "#EDEDED", 
+    file = paste0("jobsCH_byisco08_evolution_sm_", lang,".html"), libdir = "js")
+  
+  original <- list.files("js", "metricsgraphics.css", full.names = T, recursive = T)
+  file.copy(
+    list.files(system.file("extdata", package="swiRcharts"), 'metricsgraphics.css', full.names = T),
+    original, overwrite = T)
+   
+#}
+
+```

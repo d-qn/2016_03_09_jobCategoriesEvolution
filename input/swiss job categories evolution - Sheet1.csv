@@ -1,0 +1,30 @@
+code,EN,FR,DE,IT,PT,AR,RU,ES,JA,ZH
+main.title,,Le remodelage du paysage professionel suisse en 15 ans,,,,,,,,
+descr,,Evolution du pourcentage des grands groupes de professions en fonction du total des emplois de 1991 à 2015.,,,,,,,,
+source,Source,source,Quelle,Fonte,fonte,المصدر,Источник,Fuente,出典,来源
+source.name,,Office fédéral de la statistique STATENT,,,,,,,,
+source.link,,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100755.xls,,,,,,,,
+code,Code,code,Code,Codice,código,الرمز,Код,código,コード,代码
+code.name,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR
+code.link,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics
+agr.type,,Agriculteurs,,,,,,,,
+con.type,,Conducteurs et assembleurs,,,,,,,,
+dir.type,,Directeurs,,,,,,,,
+adm.type,,Employés administratifs,,,,,,,,
+art.type,,Métiers de l’industrie et de l’artisanat,,,,,,,,
+com.type,,Services & commerçants,,,,,,,,
+int.type,,Prof. intellectuelles et scientifiques,,,,,,,,
+ele.type,,Professions élémentaires,,,,,,,,
+tmp.type,,Professions intermédiaires,,,,,,,,
+examples,,exemples,,,,,,,,
+agr.ex,,"Agriculteurs, sylviculteurs, pêcheurs, ...",,,,,,,,
+con.ex,,"Conducteurs de machines, monteurs, assembleurs, ...",,,,,,,,
+dir.ex,,"Cadres de direction, gérants, ...",,,,,,,,
+adm.ex,,"Secrétaires, guichetiers, ...",,,,,,,,
+art.ex,,"Maçons, charpentiers, bouchers, ...",,,,,,,,
+com.ex,,"Coiffeurs, cuisiniers, vendeurs, ...",,,,,,,,
+int.ex,,"Ingénieurs, infirmers, juristes, psychologues, ...",,,,,,,,
+ele.ex,,"Emplois peu qualifés dans l'agriculture, manufacture, ...",,,,,,,,
+tmp.ex,,"Techniciens, agents immobiliers, opticiens, ...",,,,,,,,
+x.label,,année,,,,,,,,
+y.label,,pourcentage,,,,,,,,

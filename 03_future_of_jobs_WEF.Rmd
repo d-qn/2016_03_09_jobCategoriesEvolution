@@ -1,0 +1,95 @@
+---
+title: "03_future_of_jobs_WEF"
+author: "Duc-Quang Nguyen"
+date: "21 April 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(swiTheme)
+library(swiRcharts)
+library(dplyr)
+library(lubridate)
+library(shiny)
+library(bubbles)
+library(htmltools)
+```
+
+```{r bubblchart}
+
+# data based on WEF The Future of Jobs
+
+ne <- data.frame(value = c(4759, 1609, 497, 151, 109, 40),
+                 name = c("Office and Administrative",
+                          "Manufacturing and Production",
+                          "Construction and Extraction",
+                          "Arts, Design, Entertainment, Sports and Media",
+                          "Legal",
+                          "Installation and Maintenance"
+                          ),
+                 shortname = c(
+                   "Administration",
+                   "Manufacture",
+                   "Construction",
+                   "Arts & Media",
+                   "Juridique",
+                   "Machine"
+                 ),
+                 type = "loss")
+
+ne <- rbind(ne, data.frame(
+  value = c(492, 416, 405, 339, 303, 66),
+  name = c("Business and Financial Operations",
+           "Management",
+           "Computer and Mathematical",
+           "Architecture and Engineering",
+           "Sales and Related",
+           "Education and Training"),
+  shortname = c(
+    "Finance",
+    "Management",
+    "Informatique",
+    "Ingénieurie",
+    "Ventes",
+    "Education"
+  ),
+  type = "gain"
+))
+
+
+ne$val <- ifelse(ne$type == "gain", paste0("+", ne$value), ne$value * -1)
+ne$col <-  ifelse(ne$type == "gain", "#669999",  "#404040")
+ne$tag <- paste0(ne$shortname, " (", ne$val, ")")
+#ne$tag <- ne$shortname
+
+## data export for DW
+data.export <- select(ne, name, val, col)
+data.export$val <- as.numeric(data.export$val)
+write.csv(data.export, file = "input/WEF_job_outlook.csv", row.names = F)
+
+ne <- arrange(ne, desc(as.numeric(value)))
+ne$textcol <- ifelse(ne$type == "gain", "#404040", "#a3c2c2")
+bb <- bubbles::bubbles(ne$value, ne$tag, tooltip = ne$tag, color = ne$col, height = "600", width = "100%", textColor = ne$textcol)
+
+# gain <- filter(ne,type == "gain")
+# loss <- filter(ne,type == "loss")
+# g.bb <- bubbles::bubbles(gain$value, gain$tag, tooltip = gain$val, color = gain$col, height = "500", width = "100%")
+# l.bb <- bubbles::bubbles(loss$value, loss$tag, tooltip = loss$val, color = loss$col, height = "500", width = "100%")
+
+
+footer <- paste0(htmlLink("http://reports.weforum.org/future-of-jobs-2016/", "World Economic Forum - The Future of Jobs Report"), " | ",
+  "code: ", htmlLink("https://github.com/jcheng5/bubbles", "BubblesR"), " | swissinfo.ch")
+
+save_html(
+    fluidPage(
+      tags$head(includeHTML("styles.html")),
+      tags$h2("Cloud and Wireframe from Lattice h2"),
+      div(class = "descr", "A descriptiont yo"),
+      div(class="graphic",
+        fluidRow(column(12, offset = 0, bb))
+      ),
+      div(id = "cite", HTML(footer)),
+      div(id = "footer", "asfasdfdsaf asdfasdf")
+  ),
+  file="test_bubbles.html", libdir = "js")
+```
