@@ -1,0 +1,253 @@
+---
+title: "04_job economic division CH"
+author: "Duc-Quang Nguyen"
+date: "22 April 2016"
+output: html_document
+---
+
+## Data
+
+* [Personnes actives occupées par sections économiques et selon la nationalité](http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls) 
+
+## Key points
+
+*[Iconomix](https://www.iconomix.ch/fileadmin/user_upload/docs/mat/fr/a026/15/a026_1507_tendances_conjoncturelles_transparents.pdf)
+
+
+```{r setup, message = F, warning = F, include=FALSE}
+library(swiTheme)
+library(swiRcharts)
+library(tidyr)
+library(dplyr)
+```
+
+
+## Load and shape data
+
+```{r dataread}
+espa.file <- "input/je-f-03.02.01.20.csv"
+trad.file <- "input/Job by economical sector - Sheet1.csv"
+
+####	Load data and shape
+
+## ESPA data
+e.read <- read.csv(espa.file, stringsAsFactor = F, check.names = F)
+# rename columns
+colnames(e.read) <- gsub(" ?\\n", "", colnames(e.read))
+colnames(e.read)[1] <- "eco"
+
+# spread the data
+data <- tidyr::gather(e.read, "année", "value", 2:ncol(e.read))
+
+# for each economic sector & year, compute the total job
+data <- data %>% group_by(année) %>% mutate(total = sum(value, na.rm = T)) %>% ungroup()
+
+# compute the share of eco by year
+data$share <- (data$value / data$total) 
+#data <- data %>% filter(eco != "Sans indication/Ne sait pas   ")
+
+data.change <- data %>% group_by(eco) %>% 
+  summarise(delta = (dplyr::last(share) - dplyr::first(share)) * 100) %>% ungroup()
+
+# read translations
+txt <- read.csv(trad.file,
+  check.names = F, stringsAsFactors = F, row.names = 1)
+
+# discard non complete translations columns
+cidx <- unique(which(txt =="", T)[,2])
+if(length(cidx > 0)) {
+  warning(paste(colnames(txt)[cidx], collapse = "\t"), " languagues will be discarded!", "\n")
+  txt <- txt[,-cidx, drop = F]
+  colnames(txt)
+}
+
+```
+
+```{r ggplot}
+# economic sectors to highlight
+# library(svglite)
+# library(htmltools)
+# library(shiny)
+library(ggplot2)
+library(ggrepel)
+
+hl <- data.change[abs(data.change$delta) >= 1.5, 'eco'] %>% unlist()
+
+bg.data <- data %>% filter(!eco %in% hl)
+hl.data <- data %>% filter(eco %in% hl)
+
+linesize <- 1
+ 
+bg.eco.sorted <- data %>% filter(!eco %in% hl, année == max(bg.data$année)) %>% arrange(desc(share)) %>% 
+  select(eco) %>% unlist()
+
+caption <- paste(bg.eco.sorted, collapse = ",  ")
+caption <-  paste0(strwrap(caption, 250), sep="", collapse="\n")
+subtitle <- "Les Sections économiques en gris clair sont indiquées dessous (par ordre décroissant d'importance en 2015)"
+
+line.chart <- ggplot(bg.data, aes(année, share)) + 
+  geom_line(aes(group = eco), colour = "lightgrey", alpha = 0.6, size = linesize) + 
+  swi_theme() + 
+  scale_y_continuous(name = "", label=percent, limits = c(0, max(data$share))) +
+  scale_x_discrete( breaks = pretty_breaks(n = 6), name ="")  +
+   geom_line(data = hl.data, aes(group = eco, colour = eco), size = linesize) +
+  geom_label_repel(data = subset(hl.data, année == max(hl.data$année)), 
+      aes(label=eco, fill = eco), nudge_x = 0.5, nudge_y = 0.02, size = 2) +
+      theme(legend.position = "none") + expand_limits(x = 25) + scale_fill_manual(values = swi_rpal) +
+  scale_colour_manual(values = swi_rpal) + 
+  ggtitle("Parts des personnes actives occupées par sections économiques") + 
+  labs(caption = caption, subtitle = subtitle) + theme(plot.margin = unit(c(2, 2, 1, 0), "lines"))
+
+line.chart
+
+### Save as an svg html graphic
+# tags$html(
+#   tags$head(includeHTML("styles.html")),
+#   tags$body(
+#     suppressMessages(htmlSVG(print(line.chart), width = 15, height = 12))
+#     )
+# ) -> chart
+# 
+# html_print(chart, background="#dfdada;")
+# save_html(chart, "JobEconomicDivision_04_linechart.html")
+```
+
+
+
+
+```{r stackedarea}
+# plot a stacked area chart
+
+chartHeight <- 560
+
+for (i in 1:ncol(txt)) {
+
+  i <- 1
+  
+  lang <- colnames(txt)[i]
+  output.html <- paste("output/04_jobByEconomicalSector_stackedArea_", lang, ".html", sep ="")
+
+  dd <- data
+  # get the economical sector translations
+  dd$cat <- as.factor(dd$eco)
+  levels(dd$cat) <- txt[grep("\\.eco", rownames(txt)), lang]
+  # filter out unknown 
+  dd <- dd %>% filter(eco != "Sans indication/Ne sait pas   ")
+  dd$cat <- factor(dd$cat)
+  
+  ## create fancy tooltip as html table
+  dd$name <- paste0(
+    '<table cellpadding="1" style="line-height:1.2">',
+    '<tr><td align="left"><div style="font-size:0.9em"><strong>', dd$cat,'</strong></td></tr>',
+    '<tr><td><div style="font-size:0.85em">', dd$année, ': ',
+    '<strong>', round(dd$share * 100, 1), '%</div></td></tr>',
+    '<tr><td><div style="font-size:0.85em">',
+      dd$value, " milliers d'emplois", '</div></td></tr>',
+    '</table>')
+
+  visible <- c("Activité industrielle, prod. d'énergie", "Commerce, réparation", 
+    "Act. spécialisées, scientifiques et techniques", "Santé humaine et action sociale")
+  
+  ## CHART
+  a <- Highcharts$new()
+  a$chart(type = 'area', height = chartHeight, spacing = c(4, 0, 8, 0))
+  hSeries <- hSeries2(data.frame(
+    x = dd$année,
+    y = dd$share,
+    name = dd$name,
+    series = dd$cat), "series")
+  a$series(hSeries)
+
+  a$colors(swi_pal)
+  a$plotOptions(area = list(stacking = "normal",
+    lineWidth = 1, marker = list(enabled = FALSE, symbol = "circle", radius = 1)),
+    series = list(fillOpacity = 1, trackByArea = TRUE))
+
+  a$legend(borderWidth= 0, margin = 1, itemMarginTop = 2, itemMarginBottom = 3, itemDistance = 5, itemHoverStyle = list(color = '#996666'),
+    itemStyle = list(fontWeight = "normal", fontSize = "0.8em"),
+    title = list(style = list(fontWeight ='bold'),
+    text = paste0(txt['legend.title', lang], ' <span style="font-size: 9px; color: #666; font-weight: normal">',
+    txt['legend.descr', lang], '</span><br>')), style = list(fontStyle = 'italic'))
+  a$xAxis(title = list(text = ""), max = max(dd$année), min = min(dd$année))
+
+  a$lang( numericSymbols= NULL)
+  a$yAxis(title = list(text = ""),
+    gridLineColor = "#EFEFEF", ceiling = 1, tickPixelInterval = 100,
+    labels = list(formatter = "#! function () {return (this.value * 100) + '%';} !#", x = -5))
+
+  a$tooltip(formatter = "#! function() { return this.point.name; } !#", useHTML = T ,
+    borderWidth = 2, style = list(padding = 4))
+
+  # hide some series: https://github.com/ramnathv/rCharts/issues/527
+  a$params$series = lapply(seq_along(a$params$series), function(i){
+    x <- a$params$series[[i]]
+    x$visible <- x$name %in% visible
+    return(x)
+  })
+  
+  hChart.html <- tempfile("hChart_area")
+  a$save(hChart.html)
+  # Convert highcharts-rCharts html chart into a responsive one
+  hChart2responsiveHTML(hChart.html, output.html = output.html,
+    h2 = txt['main.title',lang], descr = txt['descr',lang],
+    source = paste0(txt["source",lang], ": ",
+      htmlLink(txt["source.link",lang],
+      txt["source.name",lang])),
+    h3 = "",
+    author = htmlLink("http://www.swissinfo.ch", "swissinfo.ch"))
+
+}
+
+
+
+
+
+
+
+
+
+
+
+```
+
+```{r stackedarea highcharter test, echo = F}
+# library(highcharter)
+# 
+# data$année <- as.numeric(data$année)
+# 
+# #split data by economical sector
+# # dd <- lapply(unique(data$eco), function(ec) {
+# #   values <- data %>% filter(eco == ec) %>%
+# #     arrange(année) %>% select(value) %>%
+# #     unlist(use.names = F)
+# #   list(data = as.numeric(values), name = ec)
+# # })
+# 
+# dd <- data %>% rename(name = eco, x = année, y = value)
+# colors <- swi_rpal
+# names(colors) <- unique(dd$name)
+# dd$color = colors[match(dd$name, names(colors))]
+# #dd$series <- dd$name
+# #hc_add_series_df
+# 
+# 
+# 
+# chartHeight <- 500
+# 
+# hc <- highchart() %>% 
+#   hc_chart(type = "area",  height = chartHeight, spacing = 3) %>%
+#   hc_plotOptions(series = list(stacking = "percent", lineWidth = 0, 
+#     marker = list(enabled = FALSE, symbol = "circle", radius = 1))) %>%
+#  # hc_xAxis(min = min(data$année), max = max(data$année)) %>%
+#   hc_add_series_df(dd)
+#   
+#   
+#   
+#   hc_add_series(name = "Tokyo", data = citytemp$tokyo) %>%
+#   hc_add_series(name = "New York", data = citytemp$new_york)
+# hc 
+#     
+# hc %>%
+#   hc_add_series(name = "London", data = citytemp$london, type = "area") 
+
+```

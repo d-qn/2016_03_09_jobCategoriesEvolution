@@ -27,7 +27,6 @@ output: html_document
 
 * [Emplois en équivalents plein temps par divisions économique](http://www.bfs.admin.ch/bfs/portal/fr/index/infothek/erhebungen__quellen/blank/blank/statistique_de_l_emploi/06.Document.64565.xls) 1991-2015, par secteur éncomique et sous-secteurs: restauration, assurances, ...
 
-* [Personnes actives occupées par sections économiques et selon la nationalité](http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls) assez similaire...
 
 * [ILO](http://www.ilo.org/ilostat/faces/home/statisticaldata/bulk-download?_adf.ctrl-state=o2320bwuj_732&clean=true&_afrLoop=636926180993963)
 
@@ -147,7 +146,7 @@ jobs %>% ggplot(aes(x = année, y = tot)) +
 jobs %<>% group_by(profession) %>% mutate(year = as.numeric(format(année, "%Y")))
 jobsy <- jobs %>% group_by(profession, year) %>% dplyr::summarise(tot = last(tot))  %>% ungroup()                          
 jobsy <- jobsy %>% group_by(year) %>% mutate(yearlytot = sum(tot, na.rm = T)) %>% 
-  ungroup %>% group_by(year) %>%  mutate(perc = (tot/yearlytot) * 100) %>% ungroup()
+  ungroup %>% group_by(year) %>%  mutate(perc = (tot/yearlytot) ) %>% ungroup()
 
 jobsy  %>% ggplot(aes(x = year, y = perc)) + 
   geom_line(size = 1, alpha = 0.8, colour = "#663333") + ylab("% professions") +
@@ -207,20 +206,26 @@ lang <- 'FR'
   descr <- txt[gsub("\\.type", "\\.ex", names(job.type)), lang]
   names(descr) <- names(job.type)
 
-  jobsy.delta$col <- ifelse(jobsy.delta$pc.change > 0, "#336666", "#ab3d3f")
+  jobsy.delta$col <- as.character(cut(jobsy.delta$pc.change * 100, breaks = c(-Inf, -4, 0, 4, Inf), labels = c("#ab3d3f", "#d68f90" , "#66b2b2", "#336666")))
+  #jobsy.delta$col <- ifelse(jobsy.delta$pc.change > 0, "#336666", "#ab3d3f")
+  #jobsy.delta$col <- ifelse(abs(jobsy.delta$pc.change > 4), jobsy.delta$col , alpha(jobsy.delta$col, 0.6))
   jobsy.delta$job.type <- names(job.type)[match(jobsy.delta$profession, job.type)]
   
-  plots <- lapply(unique(dd$job.type), function(p) {
-    pc.delta <- jobsy.delta[which(jobsy.delta$job.type == p),'pc.change']
+  # sort job.type by pc.change
+  job.type.sorted <- jobsy.delta %>% arrange(pc.change) %>% select(job.type) %>% unlist()
+  
+  plots <- lapply(job.type.sorted, function(p) {
+    pc.delta <- jobsy.delta[which(jobsy.delta$job.type == p),'pc.change'] * 100
     title <- paste0(as.character(job.title[p]), " (",
               ifelse(pc.delta > 0, "+", ""), round(pc.delta)
               ,"%)")
     
     mjs_plot(data = filter(dd, job.type == p), 
              x = axis.labels[1], y = axis.labels[2],
+             format="percentage", 
              width="100%", height="250px", decimals = 1, 
              description = as.character(descr[p]),
-             left = 21, right = 9, bottom = 18, buffer = 0, top = 0, linked = F, 
+             left = 27, right = 10, bottom = 18, buffer = 0, top = 0, linked = F, 
              title = title) %>%
       mjs_line(area = TRUE, 
         color = as.character(jobsy.delta[which(jobsy.delta$job.type == p),'col'])) %>%

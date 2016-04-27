@@ -56,7 +56,7 @@ ne <- rbind(ne, data.frame(
   type = "gain"
 ))
 
-
+#ne$val <- ifelse(ne$type == "gain", paste0("+", round(ne$value / 1000, digits = 2)), round(ne$value / 1000, digits = 2) * -1)
 ne$val <- ifelse(ne$type == "gain", paste0("+", ne$value), ne$value * -1)
 ne$col <-  ifelse(ne$type == "gain", "#669999",  "#404040")
 ne$tag <- paste0(ne$shortname, " (", ne$val, ")")
@@ -68,9 +68,11 @@ data.export$val <- as.numeric(data.export$val)
 write.csv(data.export, file = "input/WEF_job_outlook.csv", row.names = F)
 
 ne <- arrange(ne, desc(as.numeric(value)))
-ne$textcol <- ifelse(ne$type == "gain", "#404040", "#a3c2c2")
-bb <- bubbles::bubbles(ne$value, ne$tag, tooltip = ne$tag, color = ne$col, height = "600", width = "100%", textColor = ne$textcol)
-
+#ne$textcol <- ifelse(ne$type == "gain", "#404040", "#a3c2c2")
+ne$textcol <-  "#a3c2c2"
+bb <- bubbles::bubbles(ne$value, ne$tag, tooltip = ne$tag, color = ne$col, height = "500", width = "100%", textColor = ne$textcol)
+#bb$sizingPolicy$defaultWidth <- "100%"
+  
 # gain <- filter(ne,type == "gain")
 # loss <- filter(ne,type == "loss")
 # g.bb <- bubbles::bubbles(gain$value, gain$tag, tooltip = gain$val, color = gain$col, height = "500", width = "100%")
@@ -83,13 +85,13 @@ footer <- paste0(htmlLink("http://reports.weforum.org/future-of-jobs-2016/", "Wo
 save_html(
     fluidPage(
       tags$head(includeHTML("styles.html")),
-      tags$h2("Cloud and Wireframe from Lattice h2"),
-      div(class = "descr", "A descriptiont yo"),
+      tags$h2("5 millions d'emplois devraient disparaître ces 5 prochaines années"),
+      div(class = "descr", HTML("Perspectives nets en milliers d'emplois pour le monde de 2015-2020 par groupe d'emplois. Les bulles sombres représentent les pertes d'emplois, les claires les créations")),
       div(class="graphic",
         fluidRow(column(12, offset = 0, bb))
       ),
-      div(id = "cite", HTML(footer)),
-      div(id = "footer", "asfasdfdsaf asdfasdf")
+      div(id = "cite", HTML(footer))#,
+      #div(id = "footer", "asfasdfdsaf asdfasdf")
   ),
-  file="test_bubbles.html", libdir = "js")
+  file="bubbles_futureJob_FR.html", libdir = "js")
 ```
