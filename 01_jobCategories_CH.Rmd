@@ -223,7 +223,7 @@ lang <- 'FR'
     mjs_plot(data = filter(dd, job.type == p), 
              x = axis.labels[1], y = axis.labels[2],
              format="percentage", 
-             width="100%", height="250px", decimals = 1, 
+             width="100%", height="190px", decimals = 1, 
              description = as.character(descr[p]),
              left = 27, right = 10, bottom = 18, buffer = 0, top = 0, linked = F, 
              title = title) %>%
@@ -239,11 +239,10 @@ lang <- 'FR'
       tags$h2(txt["main.title", lang]),
       div(class = "descr", txt["descr", lang]),
       div(class="graphic", 
-          fluidRow(lapply(1:length(plots), function(i) {
-            column(4, plots[[i]])
-          })
-          ),
-          div(id = "cite", HTML(footer))
+        fluidRow(lapply(1:length(plots), function(i) {
+          column(4, plots[[i]])
+        })),
+      div(id = "cite", HTML(footer))
       )
     ), #background = "#EDEDED", 
     file = paste0("jobsCH_byisco08_evolution_sm_", lang,".html"), libdir = "js")

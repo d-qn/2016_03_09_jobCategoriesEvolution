@@ -364,7 +364,7 @@ library(metricsgraphics)</code></pre>
     mjs_plot(data = filter(dd, job.type == p), 
              x = axis.labels[1], y = axis.labels[2],
              format=&quot;percentage&quot;, 
-             width=&quot;100%&quot;, height=&quot;250px&quot;, decimals = 1, 
+             width=&quot;100%&quot;, height=&quot;190px&quot;, decimals = 1, 
              description = as.character(descr[p]),
              left = 27, right = 10, bottom = 18, buffer = 0, top = 0, linked = F, 
              title = title) %&gt;%
@@ -380,11 +380,10 @@ library(metricsgraphics)</code></pre>
       tags$h2(txt[&quot;main.title&quot;, lang]),
       div(class = &quot;descr&quot;, txt[&quot;descr&quot;, lang]),
       div(class=&quot;graphic&quot;, 
-          fluidRow(lapply(1:length(plots), function(i) {
-            column(4, plots[[i]])
-          })
-          ),
-          div(id = &quot;cite&quot;, HTML(footer))
+        fluidRow(lapply(1:length(plots), function(i) {
+          column(4, plots[[i]])
+        })),
+      div(id = &quot;cite&quot;, HTML(footer))
       )
     ), #background = &quot;#EDEDED&quot;, 
     file = paste0(&quot;jobsCH_byisco08_evolution_sm_&quot;, lang,&quot;.html&quot;), libdir = &quot;js&quot;)

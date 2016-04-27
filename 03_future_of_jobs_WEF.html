@@ -121,30 +121,35 @@ write.csv(data.export, file = &quot;input/WEF_job_outlook.csv&quot;, row.names =
 ne &lt;- arrange(ne, desc(as.numeric(value)))
 #ne$textcol &lt;- ifelse(ne$type == &quot;gain&quot;, &quot;#404040&quot;, &quot;#a3c2c2&quot;)
 ne$textcol &lt;-  &quot;#a3c2c2&quot;
-bb &lt;- bubbles::bubbles(ne$value, ne$tag, tooltip = ne$tag, color = ne$col, height = &quot;500&quot;, width = &quot;100%&quot;, textColor = ne$textcol)
-#bb$sizingPolicy$defaultWidth &lt;- &quot;100%&quot;
+bb &lt;- bubbles::bubbles(ne$value, ne$tag, tooltip = ne$tag, color = ne$col, height = &quot;430&quot;, width = &quot;100%&quot;, textColor = ne$textcol)
+
   
-# gain &lt;- filter(ne,type == &quot;gain&quot;)
-# loss &lt;- filter(ne,type == &quot;loss&quot;)
-# g.bb &lt;- bubbles::bubbles(gain$value, gain$tag, tooltip = gain$val, color = gain$col, height = &quot;500&quot;, width = &quot;100%&quot;)
-# l.bb &lt;- bubbles::bubbles(loss$value, loss$tag, tooltip = loss$val, color = loss$col, height = &quot;500&quot;, width = &quot;100%&quot;)
-
-
 footer &lt;- paste0(htmlLink(&quot;http://reports.weforum.org/future-of-jobs-2016/&quot;, &quot;World Economic Forum - The Future of Jobs Report&quot;), &quot; | &quot;,
   &quot;code: &quot;, htmlLink(&quot;https://github.com/jcheng5/bubbles&quot;, &quot;BubblesR&quot;), &quot; | swissinfo.ch&quot;)
 
+# save_html(
+#     fluidPage(
+#       tags$head(includeHTML(&quot;styles.html&quot;)),
+#       tags$h2(&quot;5 millions d'emplois devraient disparaître ces 5 prochaines années&quot;),
+#       div(class = &quot;descr&quot;, HTML(&quot;Perspectives nets en milliers d'emplois pour le monde de 2015-2020 par groupe d'emplois. Les bulles sombres représentent les pertes d'emplois, les claires les créations&quot;)),
+#       div(class=&quot;graphic&quot;,
+#         fluidRow(column(12, offset = 0, bb))
+#       ),
+#       div(id = &quot;cite&quot;, HTML(footer))#,
+#       #div(id = &quot;footer&quot;, &quot;asfasdfdsaf asdfasdf&quot;)
+#   ),
+#   file=&quot;bubbles_futureJob_FR.html&quot;, libdir = &quot;js&quot;)
+
 save_html(
-    fluidPage(
-      tags$head(includeHTML(&quot;styles.html&quot;)),
-      tags$h2(&quot;5 millions d'emplois devraient disparaître ces 5 prochaines années&quot;),
+  tags$html(
+    tags$head(includeHTML(&quot;styles.html&quot;)),
+    tags$body(    
+      h2(&quot;5 millions d'emplois devraient disparaître ces 5 prochaines années&quot;),
       div(class = &quot;descr&quot;, HTML(&quot;Perspectives nets en milliers d'emplois pour le monde de 2015-2020 par groupe d'emplois. Les bulles sombres représentent les pertes d'emplois, les claires les créations&quot;)),
-      div(class=&quot;graphic&quot;,
-        fluidRow(column(12, offset = 0, bb))
-      ),
+      div(class=&quot;graphic&quot;, bb),
       div(id = &quot;cite&quot;, HTML(footer))#,
       #div(id = &quot;footer&quot;, &quot;asfasdfdsaf asdfasdf&quot;)
-  ),
-  file=&quot;bubbles_futureJob_FR.html&quot;, libdir = &quot;js&quot;)</code></pre>
+  )), file=&quot;bubbles_futureJob_FR.html&quot;, libdir = &quot;js&quot;)</code></pre>
 
 
 </div>
