@@ -1,6 +1,6 @@
 code,EN,FR,DE,IT,PT,AR,RU,ES,JA,ZH
-main.title,,L'emploi en Suisse par sections économiques,,,,,,,,
-descr,,Parts des personnes actives occupées par sections économiques de 1991 à 2015,,,,,,,,
+main.title,,L’emploi en Suisse par secteurs économiques,,,,,,,,
+descr,,Part des personnes actives occupées par branche (1991 à 2015),,,,,,,,
 source,Source,source,Quelle,Fonte,fonte,المصدر,Источник,Fuente,出典,来源
 source.name,,Office fédéral de la statistique ESPA,,,,,,,,
 source.link,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100751.xls
@@ -19,5 +19,5 @@ P.eco,,Enseignement,,,,,,,,
 Q.eco,,Santé humaine et action sociale,,,,,,,,
 RST.eco,,"Arts, loisirs, ménages privés, autres",,,,,,,,
 SANS.eco,,Sans indication/Ne sait pas,,,,,,,,
-legend.title,,Sections économiques,,,,,,,,
+legend.title,,Secteurs économiques,,,,,,,,
 legend.descr,,(Cliquez pour masquer ou afficher),,,,,,,,

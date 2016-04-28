@@ -68,34 +68,38 @@ img {
 </div>
 
 
+<div id="define-the-data" class="section level2">
+<h2>Define the data</h2>
+<pre class="r"><code>## Get translations
+trad.file &lt;- &quot;input/Future of jobs WEF bubble chart - Sheet1.csv&quot;
+txt &lt;- read.csv(trad.file, row.names = 1, stringsAsFactors = F)
+
+# discard non complete translations columns
+cidx &lt;- unique(which(txt ==&quot;&quot;, T)[,2])
+if(length(cidx &gt; 0)) {
+  warning(paste(colnames(txt)[cidx], collapse = &quot;\t&quot;), &quot; languagues will be discarded!&quot;, &quot;\n&quot;)
+  txt &lt;- txt[,-cidx, drop = F]
+  colnames(txt)
+}</code></pre>
+<pre><code>## Warning: EN  DE  IT  PT  AR  RU  ES  JA  ZH languagues will be discarded!</code></pre>
+<pre><code>## [1] &quot;FR&quot;</code></pre>
 <pre class="r"><code># data based on WEF The Future of Jobs
-
-ne &lt;- data.frame(value = c(4759, 1609, 497, 151, 109, 40),
-                 name = c(&quot;Office and Administrative&quot;,
-                          &quot;Manufacturing and Production&quot;,
-                          &quot;Construction and Extraction&quot;,
-                          &quot;Arts, Design, Entertainment, Sports and Media&quot;,
-                          &quot;Legal&quot;,
-                          &quot;Installation and Maintenance&quot;
-                          ),
-                 shortname = c(
-                   &quot;Administration&quot;,
-                   &quot;Manufacture&quot;,
-                   &quot;Construction&quot;,
-                   &quot;Arts &amp; Media&quot;,
-                   &quot;Juridique&quot;,
-                   &quot;Machine&quot;
-                 ),
-                 type = &quot;loss&quot;)
-
+ne &lt;- data.frame(
+  value = c(4759, 1609, 497, 151, 109, 40),
+  key = c(&quot;l1.eco&quot;, &quot;l2.eco&quot;, &quot;l3.eco&quot;, &quot;l4.eco&quot;, &quot;l5.eco&quot;, &quot;l6.eco&quot;),
+  shortname = c(
+    &quot;Administration&quot;,
+    &quot;Manufacture&quot;,
+    &quot;Construction&quot;,
+    &quot;Arts &amp; Media&quot;,
+    &quot;Juridique&quot;,
+    &quot;Machine&quot;
+  ),
+  type = &quot;loss&quot;
+)
 ne &lt;- rbind(ne, data.frame(
   value = c(492, 416, 405, 339, 303, 66),
-  name = c(&quot;Business and Financial Operations&quot;,
-           &quot;Management&quot;,
-           &quot;Computer and Mathematical&quot;,
-           &quot;Architecture and Engineering&quot;,
-           &quot;Sales and Related&quot;,
-           &quot;Education and Training&quot;),
+  key = c(&quot;g1.eco&quot;, &quot;g2.eco&quot;, &quot;g3.eco&quot;, &quot;g4.eco&quot;, &quot;g5.eco&quot;, &quot;g6.eco&quot;),
   shortname = c(
     &quot;Finance&quot;,
     &quot;Management&quot;,
@@ -107,49 +111,42 @@ ne &lt;- rbind(ne, data.frame(
   type = &quot;gain&quot;
 ))
 
-#ne$val &lt;- ifelse(ne$type == &quot;gain&quot;, paste0(&quot;+&quot;, round(ne$value / 1000, digits = 2)), round(ne$value / 1000, digits = 2) * -1)
-ne$val &lt;- ifelse(ne$type == &quot;gain&quot;, paste0(&quot;+&quot;, ne$value), ne$value * -1)
+idx &lt;- match(ne$key, rownames(txt))
+stopifnot(all(idx))</code></pre>
+<pre class="r"><code>ne$val &lt;- ifelse(ne$type == &quot;gain&quot;, paste0(&quot;+&quot;, ne$value), ne$value * -1)
 ne$col &lt;-  ifelse(ne$type == &quot;gain&quot;, &quot;#669999&quot;,  &quot;#404040&quot;)
-ne$tag &lt;- paste0(ne$shortname, &quot; (&quot;, ne$val, &quot;)&quot;)
-#ne$tag &lt;- ne$shortname
 
-## data export for DW
-data.export &lt;- select(ne, name, val, col)
-data.export$val &lt;- as.numeric(data.export$val)
-write.csv(data.export, file = &quot;input/WEF_job_outlook.csv&quot;, row.names = F)
-
-ne &lt;- arrange(ne, desc(as.numeric(value)))
-#ne$textcol &lt;- ifelse(ne$type == &quot;gain&quot;, &quot;#404040&quot;, &quot;#a3c2c2&quot;)
-ne$textcol &lt;-  &quot;#a3c2c2&quot;
-bb &lt;- bubbles::bubbles(ne$value, ne$tag, tooltip = ne$tag, color = ne$col, height = &quot;430&quot;, width = &quot;100%&quot;, textColor = ne$textcol)
-
+for (i in 1:ncol(txt)) {
+  lang &lt;- colnames(txt)[i]
+  output.html &lt;- paste0(&quot;bubbles_futureJob_&quot;, lang, &quot;.html&quot;)
   
-footer &lt;- paste0(htmlLink(&quot;http://reports.weforum.org/future-of-jobs-2016/&quot;, &quot;World Economic Forum - The Future of Jobs Report&quot;), &quot; | &quot;,
-  &quot;code: &quot;, htmlLink(&quot;https://github.com/jcheng5/bubbles&quot;, &quot;BubblesR&quot;), &quot; | swissinfo.ch&quot;)
-
-# save_html(
-#     fluidPage(
-#       tags$head(includeHTML(&quot;styles.html&quot;)),
-#       tags$h2(&quot;5 millions d'emplois devraient disparaître ces 5 prochaines années&quot;),
-#       div(class = &quot;descr&quot;, HTML(&quot;Perspectives nets en milliers d'emplois pour le monde de 2015-2020 par groupe d'emplois. Les bulles sombres représentent les pertes d'emplois, les claires les créations&quot;)),
-#       div(class=&quot;graphic&quot;,
-#         fluidRow(column(12, offset = 0, bb))
-#       ),
-#       div(id = &quot;cite&quot;, HTML(footer))#,
-#       #div(id = &quot;footer&quot;, &quot;asfasdfdsaf asdfasdf&quot;)
-#   ),
-#   file=&quot;bubbles_futureJob_FR.html&quot;, libdir = &quot;js&quot;)
-
-save_html(
-  tags$html(
-    tags$head(includeHTML(&quot;styles.html&quot;)),
-    tags$body(    
-      h2(&quot;5 millions d'emplois devraient disparaître ces 5 prochaines années&quot;),
-      div(class = &quot;descr&quot;, HTML(&quot;Perspectives nets en milliers d'emplois pour le monde de 2015-2020 par groupe d'emplois. Les bulles sombres représentent les pertes d'emplois, les claires les créations&quot;)),
-      div(class=&quot;graphic&quot;, bb),
-      div(id = &quot;cite&quot;, HTML(footer))#,
-      #div(id = &quot;footer&quot;, &quot;asfasdfdsaf asdfasdf&quot;)
-  )), file=&quot;bubbles_futureJob_FR.html&quot;, libdir = &quot;js&quot;)</code></pre>
+  data &lt;- ne
+  
+  data$name &lt;- txt[idx, lang]
+  data$tag &lt;- paste0(data$name, &quot; (&quot;, data$val, &quot;)&quot;)
+  data &lt;- arrange(data, desc(as.numeric(value)))
+  
+  # plot
+  bb &lt;- bubbles(data$value, data$tag, tooltip = data$tag, 
+    color = data$col, height = NULL, width = &quot;100%&quot;, textColor = &quot;#a3c2c2&quot; )
+  
+  footer &lt;- paste0(htmlLink(txt[&quot;source.link&quot;, lang], 
+    txt[&quot;source.name&quot;, lang]), &quot; | &quot;,
+    txt[&quot;source&quot;, lang], &quot;: &quot;, 
+    htmlLink(&quot;https://github.com/jcheng5/bubbles&quot;, txt[&quot;code.name&quot;, lang]), 
+    &quot; | swissinfo.ch&quot;)
+  
+  save_html(
+    tags$html(
+      tags$head(includeHTML(&quot;styles.html&quot;)),
+      tags$body(    
+        h2(txt[&quot;main.title&quot;,lang]),
+        div(class = &quot;descr&quot;, HTML(txt[&quot;descr&quot;,lang])),
+        div(class=&quot;graphic&quot;, bb),
+        div(id = &quot;cite&quot;, HTML(footer))
+      )), file = output.html, libdir = &quot;js&quot;)  
+}</code></pre>
+</div>
 
 
 </div>

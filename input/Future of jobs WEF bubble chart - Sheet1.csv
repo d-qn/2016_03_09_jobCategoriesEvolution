@@ -1,0 +1,20 @@
+code,EN,FR,DE,IT,PT,AR,RU,ES,JA,ZH
+main.title,,5 millions d’emplois devraient disparaître ces 5 prochaines années dans le monde,,,,,,,,
+descr,,"Evolution pour la période 2015-2020, en milliers d’emplois",,,,,,,,
+source,Source,source,Quelle,Fonte,fonte,المصدر,Источник,Fuente,出典,来源
+source.name,,World Economic Forum - The Future of Jobs Report,,,,,,,,
+source.link,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/
+code,Code,code,Code,Codice,código,الرمز,Код,código,コード,代码
+code.name,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR
+l1.eco,,Secteur administratif,,,,,,,,
+l2.eco,,Industrie,,,,,,,,
+l3.eco,,Construction,,,,,,,,
+l4.eco,,Arts & médias,,,,,,,,
+l5.eco,,Droit,,,,,,,,
+l6.eco,,Machine,,,,,,,,
+g1.eco,,Finance,,,,,,,,
+g2.eco,,Management,,,,,,,,
+g3.eco,,Informatique,,,,,,,,
+g4.eco,,Ingénierie,,,,,,,,
+g5.eco,,Ventes,,,,,,,,
+g6.eco,,Education,,,,,,,,

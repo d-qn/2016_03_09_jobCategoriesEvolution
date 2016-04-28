@@ -121,19 +121,22 @@ line.chart
 chartHeight <- 560
 
 for (i in 1:ncol(txt)) {
-
-  i <- 1
   
   lang <- colnames(txt)[i]
-  output.html <- paste("output/04_jobByEconomicalSector_stackedArea_", lang, ".html", sep ="")
+  output.html <- paste("04_jobByEconomicalSector_stackedArea_", lang, ".html", sep ="")
 
   dd <- data
   # get the economical sector translations
   dd$cat <- as.factor(dd$eco)
   levels(dd$cat) <- txt[grep("\\.eco", rownames(txt)), lang]
+
   # filter out unknown 
   dd <- dd %>% filter(eco != "Sans indication/Ne sait pas   ")
   dd$cat <- factor(dd$cat)
+  
+  # sort eco sectors by share
+  rank <- dd %>% group_by(cat) %>% summarise(last = dplyr::last(share)) %>% 
+    ungroup() %>% arrange(last)
   
   ## create fancy tooltip as html table
   dd$name <- paste0(
@@ -145,8 +148,9 @@ for (i in 1:ncol(txt)) {
       dd$value, " milliers d'emplois", '</div></td></tr>',
     '</table>')
 
-  visible <- c("Activité industrielle, prod. d'énergie", "Commerce, réparation", 
-    "Act. spécialisées, scientifiques et techniques", "Santé humaine et action sociale")
+  # visible <- c("Activité industrielle, prod. d'énergie", "Commerce, réparation", 
+  #   "Act. spécialisées, scientifiques et techniques", "Santé humaine et action sociale")
+  visible <- txt[c('BE.eco', 'G.eco', 'M.eco', 'Q.eco'), lang]
   
   ## CHART
   a <- Highcharts$new()
@@ -182,8 +186,10 @@ for (i in 1:ncol(txt)) {
   a$params$series = lapply(seq_along(a$params$series), function(i){
     x <- a$params$series[[i]]
     x$visible <- x$name %in% visible
+    x$index <- which(rank$cat == x$name)
     return(x)
   })
+  
   
   hChart.html <- tempfile("hChart_area")
   a$save(hChart.html)
