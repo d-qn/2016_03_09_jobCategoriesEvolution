@@ -98,26 +98,6 @@ img {
 </ul>
 </div>
 </div>
-<div id="inspirations" class="section level2">
-<h2>Inspirations</h2>
-<ul>
-<li><a href="https://www.facebook.com/TheEconomist/videos/10153994678594060/">Economist video</a></li>
-<li><a href="http://dievolkswirtschaft.ch/fr/2015/10/2015-11-roulet/">La fin du travail ? SECO</a></li>
-</ul>
-</div>
-<div id="key-points" class="section level2">
-<h2>Key points</h2>
-<ul>
-<li>The fourth digital revolution is about to revolutionise labour amd threatens a large number of jobs.</li>
-<li>When looking at the evolution of occupation, swissinfo.ch observes that automation has already reshaped Swiss labour / destroyed numerous jobs</li>
-<li></li>
-<li></li>
-</ul>
-<p>se manifeste une certaine tendance à l’automatisation ; c’est le cas pour les employés de type administratif et les assembleurs</p>
-<p>industrial revolution replace workers</p>
-<p>computarisation and digitalisation</p>
-<p>skills upgrade</p>
-</div>
 <div id="load-data" class="section level2">
 <h2>Load data</h2>
 <pre class="r"><code>espa.file &lt;- &quot;input/je-f-03.02.01.21_cleaned_shaped.csv&quot;
@@ -331,7 +311,7 @@ library(metricsgraphics)</code></pre>
   
   axis.labels &lt;- c(txt['x.label', lang], txt['y.label', lang])
   colnames(dd)[which(colnames(dd) == &quot;year&quot;)] &lt;- axis.labels[1]
-  colnames(dd)[which(colnames(dd) == &quot;perc&quot;)] &lt;- axis.labels[2]
+  colnames(dd)[which(colnames(dd) == &quot;tot&quot;)] &lt;- axis.labels[2]
   
   job.title &lt;- txt[names(job.type), lang]
   names(job.title) &lt;- names(job.type)
@@ -347,25 +327,24 @@ library(metricsgraphics)</code></pre>
   descr &lt;- txt[gsub(&quot;\\.type&quot;, &quot;\\.ex&quot;, names(job.type)), lang]
   names(descr) &lt;- names(job.type)
 
-  jobsy.delta$col &lt;- as.character(cut(jobsy.delta$pc.change * 100, breaks = c(-Inf, -4, 0, 4, Inf), labels = c(&quot;#ab3d3f&quot;, &quot;#d68f90&quot; , &quot;#66b2b2&quot;, &quot;#336666&quot;)))
+  jobsy.delta$col &lt;- as.character(cut(jobsy.delta$change, breaks = c(-Inf, -20, 0, 50, Inf), 
+    labels = c(&quot;#ab3d3f&quot;, &quot;#d68f90&quot; , &quot;#66b2b2&quot;, &quot;#336666&quot;)))
   jobsy.delta$job.type &lt;- names(job.type)[match(jobsy.delta$profession, job.type)]
   
   # sort job.type by pc.change
-  job.type.sorted &lt;- jobsy.delta %&gt;% arrange(pc.change) %&gt;% select(job.type) %&gt;% unlist()
+  job.type.sorted &lt;- jobsy.delta %&gt;% arrange(abs.delta) %&gt;% select(job.type) %&gt;% unlist()
   
   plots &lt;- lapply(job.type.sorted, function(p) {
-    pc.delta &lt;- jobsy.delta[which(jobsy.delta$job.type == p),'pc.change'] * 100
+    pc.delta &lt;- jobsy.delta[which(jobsy.delta$job.type == p),'change']
     title &lt;- paste0(as.character(job.title[p]), &quot; (&quot;,
-              ifelse(pc.delta &gt; 0, &quot;+&quot;, &quot;&quot;), round(pc.delta), &quot;)&quot;)
-    # title &lt;- paste0(as.character(job.title[p]), &quot; (&quot;,
-    #                 ifelse(pc.delta &gt; 0, &quot;+&quot;, &quot;&quot;), round(pc.delta)
-    #                 ,&quot;%)&quot;)
+              ifelse(pc.delta &gt; 0, &quot;+&quot;, &quot;&quot;), round(pc.delta), &quot;%)&quot;)
+
     mjs_plot(data = filter(dd, job.type == p), 
              x = axis.labels[1], y = axis.labels[2],
-             format=&quot;percentage&quot;, 
-             width=&quot;100%&quot;, height=&quot;190px&quot;, decimals = 1, 
+             #format=&quot;percentage&quot;, 
+             width=&quot;100%&quot;, height=&quot;180px&quot;,
              description = as.character(descr[p]),
-             left = 27, right = 10, bottom = 18, buffer = 0, top = 0, linked = F, 
+             left = 30, right = 9, bottom = 17, buffer = 0, top = 0, linked = F, 
              title = title) %&gt;%
       mjs_line(area = TRUE, 
         color = as.character(jobsy.delta[which(jobsy.delta$job.type == p),'col'])) %&gt;%

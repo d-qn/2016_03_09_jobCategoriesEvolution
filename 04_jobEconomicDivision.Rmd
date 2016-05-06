@@ -50,8 +50,10 @@ data.change <- data %>% group_by(eco) %>%
   summarise(delta = (dplyr::last(share) - dplyr::first(share)) * 100) %>% ungroup()
 
 data.change <- data %>% group_by(eco) %>% 
-  summarise(absDelta = (dplyr::last(value) - dplyr::first(value)) * 100) %>% 
+  summarise(absDelta = (dplyr::last(value) - dplyr::first(value)) ) %>% 
   ungroup() %>% left_join(data.change)
+
+knitr::kable(data.change, digits = 3, caption = "A table produced by printr.")
 
 # read translations
 txt <- read.csv(trad.file,
@@ -115,8 +117,6 @@ line.chart
 # html_print(chart, background="#dfdada;")
 # save_html(chart, "JobEconomicDivision_04_linechart.html")
 ```
-
-
 
 
 ```{r stackedarea}

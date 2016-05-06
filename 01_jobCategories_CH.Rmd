@@ -162,7 +162,7 @@ lang <- 'FR'
   
   axis.labels <- c(txt['x.label', lang], txt['y.label', lang])
   colnames(dd)[which(colnames(dd) == "year")] <- axis.labels[1]
-  colnames(dd)[which(colnames(dd) == "perc")] <- axis.labels[2]
+  colnames(dd)[which(colnames(dd) == "tot")] <- axis.labels[2]
   
   job.title <- txt[names(job.type), lang]
   names(job.title) <- names(job.type)
@@ -178,25 +178,24 @@ lang <- 'FR'
   descr <- txt[gsub("\\.type", "\\.ex", names(job.type)), lang]
   names(descr) <- names(job.type)
 
-  jobsy.delta$col <- as.character(cut(jobsy.delta$pc.change * 100, breaks = c(-Inf, -4, 0, 4, Inf), labels = c("#ab3d3f", "#d68f90" , "#66b2b2", "#336666")))
+  jobsy.delta$col <- as.character(cut(jobsy.delta$change, breaks = c(-Inf, -20, 0, 50, Inf), 
+    labels = c("#ab3d3f", "#d68f90" , "#66b2b2", "#336666")))
   jobsy.delta$job.type <- names(job.type)[match(jobsy.delta$profession, job.type)]
   
   # sort job.type by pc.change
-  job.type.sorted <- jobsy.delta %>% arrange(pc.change) %>% select(job.type) %>% unlist()
+  job.type.sorted <- jobsy.delta %>% arrange(abs.delta) %>% select(job.type) %>% unlist()
   
   plots <- lapply(job.type.sorted, function(p) {
-    pc.delta <- jobsy.delta[which(jobsy.delta$job.type == p),'pc.change'] * 100
+    pc.delta <- jobsy.delta[which(jobsy.delta$job.type == p),'change']
     title <- paste0(as.character(job.title[p]), " (",
-              ifelse(pc.delta > 0, "+", ""), round(pc.delta), ")")
-    # title <- paste0(as.character(job.title[p]), " (",
-    #                 ifelse(pc.delta > 0, "+", ""), round(pc.delta)
-    #                 ,"%)")
+              ifelse(pc.delta > 0, "+", ""), round(pc.delta), "%)")
+
     mjs_plot(data = filter(dd, job.type == p), 
              x = axis.labels[1], y = axis.labels[2],
-             format="percentage", 
-             width="100%", height="190px", decimals = 1, 
+             #format="percentage", 
+             width="100%", height="180px",
              description = as.character(descr[p]),
-             left = 27, right = 10, bottom = 18, buffer = 0, top = 0, linked = F, 
+             left = 30, right = 9, bottom = 17, buffer = 0, top = 0, linked = F, 
              title = title) %>%
       mjs_line(area = TRUE, 
         color = as.character(jobsy.delta[which(jobsy.delta$job.type == p),'col'])) %>%
