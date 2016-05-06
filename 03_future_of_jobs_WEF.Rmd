@@ -77,7 +77,7 @@ for (i in 1:ncol(txt)) {
   
   # plot
   bb <- bubbles(data$value, data$tag, tooltip = data$tag, 
-    color = data$col, height = NULL, width = "100%", textColor = "#a3c2c2" )
+    color = data$col, height = 580, width = "100%", textColor = "#a3c2c2" )
   
   footer <- paste0(htmlLink(txt["source.link", lang], 
     txt["source.name", lang]), " | ",

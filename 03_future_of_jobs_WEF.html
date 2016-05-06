@@ -128,7 +128,7 @@ for (i in 1:ncol(txt)) {
   
   # plot
   bb &lt;- bubbles(data$value, data$tag, tooltip = data$tag, 
-    color = data$col, height = NULL, width = &quot;100%&quot;, textColor = &quot;#a3c2c2&quot; )
+    color = data$col, height = 580, width = &quot;100%&quot;, textColor = &quot;#a3c2c2&quot; )
   
   footer &lt;- paste0(htmlLink(txt[&quot;source.link&quot;, lang], 
     txt[&quot;source.name&quot;, lang]), &quot; | &quot;,

@@ -348,8 +348,6 @@ library(metricsgraphics)</code></pre>
   names(descr) &lt;- names(job.type)
 
   jobsy.delta$col &lt;- as.character(cut(jobsy.delta$pc.change * 100, breaks = c(-Inf, -4, 0, 4, Inf), labels = c(&quot;#ab3d3f&quot;, &quot;#d68f90&quot; , &quot;#66b2b2&quot;, &quot;#336666&quot;)))
-  #jobsy.delta$col &lt;- ifelse(jobsy.delta$pc.change &gt; 0, &quot;#336666&quot;, &quot;#ab3d3f&quot;)
-  #jobsy.delta$col &lt;- ifelse(abs(jobsy.delta$pc.change &gt; 4), jobsy.delta$col , alpha(jobsy.delta$col, 0.6))
   jobsy.delta$job.type &lt;- names(job.type)[match(jobsy.delta$profession, job.type)]
   
   # sort job.type by pc.change
@@ -358,9 +356,10 @@ library(metricsgraphics)</code></pre>
   plots &lt;- lapply(job.type.sorted, function(p) {
     pc.delta &lt;- jobsy.delta[which(jobsy.delta$job.type == p),'pc.change'] * 100
     title &lt;- paste0(as.character(job.title[p]), &quot; (&quot;,
-              ifelse(pc.delta &gt; 0, &quot;+&quot;, &quot;&quot;), round(pc.delta)
-              ,&quot;%)&quot;)
-    
+              ifelse(pc.delta &gt; 0, &quot;+&quot;, &quot;&quot;), round(pc.delta), &quot;)&quot;)
+    # title &lt;- paste0(as.character(job.title[p]), &quot; (&quot;,
+    #                 ifelse(pc.delta &gt; 0, &quot;+&quot;, &quot;&quot;), round(pc.delta)
+    #                 ,&quot;%)&quot;)
     mjs_plot(data = filter(dd, job.type == p), 
              x = axis.labels[1], y = axis.labels[2],
              format=&quot;percentage&quot;, 
@@ -384,7 +383,8 @@ library(metricsgraphics)</code></pre>
           column(4, plots[[i]])
         })),
       div(id = &quot;cite&quot;, HTML(footer))
-      )
+      ),
+    HTML('&lt;script type=&quot;text/javascript&quot; src=&quot;https://www.swissinfo.ch/static/Themes/basic/js/vendor/iframeResizer.contentWindow.3.5.3.min.js&quot;&gt;&lt;/script&gt;')  
     ), #background = &quot;#EDEDED&quot;, 
     file = paste0(&quot;jobsCH_byisco08_evolution_sm_&quot;, lang,&quot;.html&quot;), libdir = &quot;js&quot;)
   

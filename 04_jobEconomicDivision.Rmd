@@ -49,6 +49,10 @@ data$share <- (data$value / data$total)
 data.change <- data %>% group_by(eco) %>% 
   summarise(delta = (dplyr::last(share) - dplyr::first(share)) * 100) %>% ungroup()
 
+data.change <- data %>% group_by(eco) %>% 
+  summarise(absDelta = (dplyr::last(value) - dplyr::first(value)) * 100) %>% 
+  ungroup() %>% left_join(data.change)
+
 # read translations
 txt <- read.csv(trad.file,
   check.names = F, stringsAsFactors = F, row.names = 1)
@@ -145,7 +149,7 @@ for (i in 1:ncol(txt)) {
     '<tr><td><div style="font-size:0.85em">', dd$année, ': ',
     '<strong>', round(dd$share * 100, 1), '%</div></td></tr>',
     '<tr><td><div style="font-size:0.85em">',
-      dd$value, " milliers d'emplois", '</div></td></tr>',
+      dd$value, " ", txt['thousandjob.tp', lang], '</div></td></tr>',
     '</table>')
 
   # visible <- c("Activité industrielle, prod. d'énergie", "Commerce, réparation", 

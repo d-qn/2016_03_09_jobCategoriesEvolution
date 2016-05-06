@@ -27,38 +27,11 @@ output: html_document
 
 * [Emplois en équivalents plein temps par divisions économique](http://www.bfs.admin.ch/bfs/portal/fr/index/infothek/erhebungen__quellen/blank/blank/statistique_de_l_emploi/06.Document.64565.xls) 1991-2015, par secteur éncomique et sous-secteurs: restauration, assurances, ...
 
-
 * [ILO](http://www.ilo.org/ilostat/faces/home/statisticaldata/bulk-download?_adf.ctrl-state=o2320bwuj_732&clean=true&_afrLoop=636926180993963)
 
   * Countries: Germany, USA, France, Switzerland, United Kingdom, Russia, China, Japan, Brazil, India, 
   * "Employment by sex and occupation"
   * "International Standard Classification of Occupations, 2008 (ISCO-08)"
-
-## Inspirations
-
-* [Economist video](https://www.facebook.com/TheEconomist/videos/10153994678594060/)
-* [La fin du travail ? SECO](http://dievolkswirtschaft.ch/fr/2015/10/2015-11-roulet/)
-
-
-## Key points
-
-* The fourth digital revolution is about to revolutionise labour amd threatens a large number of jobs. 
-* When looking at the evolution of occupation, swissinfo.ch observes that automation has already reshaped Swiss labour / destroyed numerous jobs
-* 
-* 
-
-
-se manifeste une certaine tendance à l’automatisation ; c’est le cas pour les employés de type administratif et les assembleurs
-
-industrial revolution
-replace workers
-
-
-computarisation and digitalisation 
-
-skills upgrade
-
-
 
 ```{r setup, message = F, warning = F, include=FALSE}
 library(swiTheme)
@@ -177,7 +150,6 @@ knitr::kable(jobsy.delta, digits = 2, caption = "A table produced by printr.")
 library(metricsgraphics)
 library(htmltools)
 
-
 lang <- 'FR'
 
 #for(lang in colnames(txt)) {
@@ -207,8 +179,6 @@ lang <- 'FR'
   names(descr) <- names(job.type)
 
   jobsy.delta$col <- as.character(cut(jobsy.delta$pc.change * 100, breaks = c(-Inf, -4, 0, 4, Inf), labels = c("#ab3d3f", "#d68f90" , "#66b2b2", "#336666")))
-  #jobsy.delta$col <- ifelse(jobsy.delta$pc.change > 0, "#336666", "#ab3d3f")
-  #jobsy.delta$col <- ifelse(abs(jobsy.delta$pc.change > 4), jobsy.delta$col , alpha(jobsy.delta$col, 0.6))
   jobsy.delta$job.type <- names(job.type)[match(jobsy.delta$profession, job.type)]
   
   # sort job.type by pc.change
@@ -217,9 +187,10 @@ lang <- 'FR'
   plots <- lapply(job.type.sorted, function(p) {
     pc.delta <- jobsy.delta[which(jobsy.delta$job.type == p),'pc.change'] * 100
     title <- paste0(as.character(job.title[p]), " (",
-              ifelse(pc.delta > 0, "+", ""), round(pc.delta)
-              ,"%)")
-    
+              ifelse(pc.delta > 0, "+", ""), round(pc.delta), ")")
+    # title <- paste0(as.character(job.title[p]), " (",
+    #                 ifelse(pc.delta > 0, "+", ""), round(pc.delta)
+    #                 ,"%)")
     mjs_plot(data = filter(dd, job.type == p), 
              x = axis.labels[1], y = axis.labels[2],
              format="percentage", 
@@ -243,7 +214,8 @@ lang <- 'FR'
           column(4, plots[[i]])
         })),
       div(id = "cite", HTML(footer))
-      )
+      ),
+    HTML('<script type="text/javascript" src="https://www.swissinfo.ch/static/Themes/basic/js/vendor/iframeResizer.contentWindow.3.5.3.min.js"></script>')  
     ), #background = "#EDEDED", 
     file = paste0("jobsCH_byisco08_evolution_sm_", lang,".html"), libdir = "js")
   
