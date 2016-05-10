@@ -144,6 +144,9 @@ jobsy.delta <- jobsy %>% group_by(profession) %>%
 
 
 knitr::kable(jobsy.delta, digits = 2, caption = "A table produced by printr.")
+
+# Total emplois nets 1991-2015
+sum(jobsy.delta$abs.delta)
 ############################################################################################
 ###		Plot
 ############################################################################################
@@ -193,9 +196,9 @@ lang <- 'FR'
     mjs_plot(data = filter(dd, job.type == p), 
              x = axis.labels[1], y = axis.labels[2],
              #format="percentage", 
-             width="100%", height="180px",
+             width="100%", height="200px",
              description = as.character(descr[p]),
-             left = 30, right = 9, bottom = 17, buffer = 0, top = 0, linked = F, 
+             left = 31, right = 10, bottom = 40, top = 0, buffer = 0, linked = F, 
              title = title) %>%
       mjs_line(area = TRUE, 
         color = as.character(jobsy.delta[which(jobsy.delta$job.type == p),'col'])) %>%
@@ -207,7 +210,7 @@ lang <- 'FR'
   save_html(
     fluidPage(
       tags$h2(txt["main.title", lang]),
-      div(class = "descr", txt["descr", lang]),
+      div(class = "descr", HTML(paste0(txt["descr", lang], "<br><br>"))),
       div(class="graphic", 
         fluidRow(lapply(1:length(plots), function(i) {
           column(4, plots[[i]])

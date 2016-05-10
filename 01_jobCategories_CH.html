@@ -292,6 +292,9 @@ jobsy.delta &lt;- jobsy %&gt;% group_by(profession) %&gt;%
 </tr>
 </tbody>
 </table>
+<pre class="r"><code># Total emplois nets 1991-2015
+sum(jobsy.delta$abs.delta)</code></pre>
+<pre><code>## [1] 1013000</code></pre>
 <pre class="r"><code>############################################################################################
 ###     Plot
 ############################################################################################
@@ -342,9 +345,9 @@ library(metricsgraphics)</code></pre>
     mjs_plot(data = filter(dd, job.type == p), 
              x = axis.labels[1], y = axis.labels[2],
              #format=&quot;percentage&quot;, 
-             width=&quot;100%&quot;, height=&quot;180px&quot;,
+             width=&quot;100%&quot;, height=&quot;200px&quot;,
              description = as.character(descr[p]),
-             left = 30, right = 9, bottom = 17, buffer = 0, top = 0, linked = F, 
+             left = 31, right = 10, bottom = 40, top = 0, buffer = 0, linked = F, 
              title = title) %&gt;%
       mjs_line(area = TRUE, 
         color = as.character(jobsy.delta[which(jobsy.delta$job.type == p),'col'])) %&gt;%
@@ -356,7 +359,7 @@ library(metricsgraphics)</code></pre>
   save_html(
     fluidPage(
       tags$h2(txt[&quot;main.title&quot;, lang]),
-      div(class = &quot;descr&quot;, txt[&quot;descr&quot;, lang]),
+      div(class = &quot;descr&quot;, HTML(paste0(txt[&quot;descr&quot;, lang], &quot;&lt;br&gt;&lt;br&gt;&quot;))),
       div(class=&quot;graphic&quot;, 
         fluidRow(lapply(1:length(plots), function(i) {
           column(4, plots[[i]])
