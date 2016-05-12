@@ -175,13 +175,16 @@ for (i in 1:ncol(txt)) {
     itemStyle = list(fontWeight = "normal", fontSize = "0.8em"),
     title = list(style = list(fontWeight ='bold'),
     text = paste0(txt['legend.title', lang], ' <span style="font-size: 9px; color: #666; font-weight: normal">',
-    txt['legend.descr', lang], '</span><br>')), style = list(fontStyle = 'italic'))
-  a$xAxis(title = list(text = ""), max = max(dd$année), min = min(dd$année))
+    txt['legend.descr', lang], '</span><br>')), style = list(fontStyle = 'italic'),
+    rtl = ifelse(lang == 'AR', TRUE, FALSE))
+  a$xAxis(title = list(text = ""), max = max(dd$année), min = min(dd$année),
+    reversed = ifelse(lang == "AR", TRUE, FALSE ))
 
   a$lang( numericSymbols= NULL)
   a$yAxis(title = list(text = ""),
     gridLineColor = "#EFEFEF", ceiling = 1, tickPixelInterval = 100,
-    labels = list(formatter = "#! function () {return (this.value * 100) + '%';} !#", x = -5))
+    labels = list(formatter = "#! function () {return (this.value * 100) + '%';} !#", x = -5),
+    opposite = ifelse(lang == 'AR', TRUE, FALSE))
 
   a$tooltip(formatter = "#! function() { return this.point.name; } !#", useHTML = T ,
     borderWidth = 2, style = list(padding = 4))
@@ -193,7 +196,6 @@ for (i in 1:ncol(txt)) {
     x$index <- which(rank$cat == x$name)
     return(x)
   })
-  
   
   hChart.html <- tempfile("hChart_area")
   a$save(hChart.html)

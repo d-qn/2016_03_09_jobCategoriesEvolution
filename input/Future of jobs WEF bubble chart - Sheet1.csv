@@ -1,20 +1,28 @@
 code,EN,FR,DE,IT,PT,AR,RU,ES,JA,ZH
-main.title,,5 millions d’emplois devraient disparaître ces 5 prochaines années,,,,,,,,
-descr,,"Evolution pour la période 2015-2020, en milliers d’emplois dans le monde. La taille des bulles est proportionnelle aux prévisions d'emplois par branche économique. Les bulles sombres représentent les pertes d'emplois, les claires les augmentations.",,,,,,,,
+main.title,Five million jobs should disappear in the next five years,5 millions d’emplois devraient disparaître ces 5 prochaines années,5 Millionen Jobs werden in den nächsten 5 Jahren voraussichtlich verschwinden,Nei prossimi cinque anni dovrebbero scomparire 5 milioni di impieghi,,"من المُتوقع أن تختفي 5 ملايين مواطن عمل في السنوات الخمس
+المقبلة. 
+
+",,,,
+descr,"Changes for 2015-2020 period in thousands of jobs worldwide. The size of the bubble is proportionate to the employment forecasts by economic sector. Dark bubbles represent job losses, clear bubbles are new jobs.","Evolution pour la période 2015-2020, en milliers d’emplois dans le monde. La taille des bulles est proportionnelle aux prévisions d'emplois par branche économique. Les bulles sombres représentent les pertes d'emplois, les claires les augmentations.","Entwicklung im Zeitraum 2015-2020, in Tausend Angestellten weltweit. Die Grösse der Kreise ist proportional zu den Prognosen pro Wirtschaftszweig. Die dunklen Kreise bedeuten eine Abnahme, die hellen eine Zunahme.","Evoluzione per il periodo 2015-2020, in migliaia di impieghi nel mondo. La grandezza delle bolle è proporzionale alle previsioni a seconda dei settori economici. Le bolle più scure rappresentano una perdita di impieghi, quelle più chiare un aumento.",,"التطور المرتقب في الفترة ما بين 2015 و2020، بآلاف
+مواطن الشغل في جميع أنحاء العالم. حجم الفقاعة يتناسب مع توقعات التوظيف حسب القطاع
+الإقتصادي. تمثل الفقاعات الداكنة فقدان الوظائف، والفقاعات الفاتحة زيادة فرص
+العمل.
+
+",,,,
 source,Source,source,Quelle,Fonte,fonte,المصدر,Источник,Fuente,出典,来源
-source.name,,World Economic Forum - The Future of Jobs Report,,,,,,,,
+source.name,World Economic Forum - The Future of Jobs Report,World Economic Forum - The Future of Jobs Report,World Economic Forum - The Future of Jobs Report,World Economic Forum - The Future of Jobs Report,,المنتدى الإقتصادي العالمي - تقرير مستقبل الوظائف,,,,
 source.link,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/
 code,Code,code,Code,Codice,código,الرمز,Код,código,コード,代码
 code.name,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR
-l1.eco,,Secteur administratif,,,,,,,,
-l2.eco,,Industrie,,,,,,,,
-l3.eco,,Construction,,,,,,,,
-l4.eco,,Arts & médias,,,,,,,,
-l5.eco,,Droit,,,,,,,,
-l6.eco,,Machine,,,,,,,,
-g1.eco,,Finance,,,,,,,,
-g2.eco,,Management,,,,,,,,
-g3.eco,,Informatique,,,,,,,,
-g4.eco,,Ingénierie,,,,,,,,
-g5.eco,,Ventes,,,,,,,,
-g6.eco,,Education,,,,,,,,
+l1.eco,Administrative sector,Secteur administratif,Verwaltung,Settore amministrativo,,القطاع الإداري,,,,
+l2.eco,Industry,Industrie,Industrie,Industria,,الصناعة,,,,
+l3.eco,Construction,Construction,Bau,Edilizia,,البناء,,,,
+l4.eco,Arts and media,Arts & médias,Kunst & Medien,Arti e media,,الفنون والإعلام,,,,
+l5.eco,Law,Droit,Recht,Diritto,,القانون,,,,
+l6.eco,Machines,Machine,Maschinenbau,Macchine,,الآلات,,,,
+g1.eco,Finance,Finance,Finanzen,Finanze,,المالية,,,,
+g2.eco,Management,Management,Management,Management,,التسيير,,,,
+g3.eco,IT,Informatique,Datenverarbeitung,Informatica,,معالجة المعلومات,,,,
+g4.eco,Engineering,Ingénierie,Ingenieurwesen,Ingegneria,,الهندسة,,,,
+g5.eco,Sales,Ventes,Verkauf,Vendita,,المبيعات,,,,
+g6.eco,Education,Education,Bildung,Educazione,,التربية,,,,

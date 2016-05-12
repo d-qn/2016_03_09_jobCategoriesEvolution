@@ -1,30 +1,60 @@
 code,EN,FR,DE,IT,PT,AR,RU,ES,JA,ZH
-main.title,,Le remodelage du paysage professionel suisse en 15 ans,,,,,,,,
-descr,,Evolution du nombre d'emplois pour les grands groupes de professions en Suisse. Les chiffres entre parenthèses correspondent à la différence d'emplois en % entre 1991 et 2015. Placez votre curseur ou tapotez sur les titres des graphiques pour voir des exemples de professions.,,,,,,,,
+main.title,Switzerland's evolving work environment over the past 15 years,Le remodelage du paysage professionel suisse en 15 ans,Die Umgestaltung der Schweizer Berufslandschaft in 15 Jahren,Riorganizzazione del panorama professionale svizzero in 15 anni,,"
+
+كيف تغير المشهد المهني السويسري على مدى 15 عاما
+
+",,,,
+descr,Change in the number of jobs by group of professions. The figures in brackets correspond to the % change between 1991 and 2015. Place your cursor over the graphic or click on the titles to see examples of professions.,Evolution du nombre d'emplois pour les grands groupes de professions en Suisse. Les chiffres entre parenthèses correspondent à la différence d'emplois en % entre 1991 et 2015. Placez votre curseur ou tapotez sur les titres des graphiques pour voir des exemples de professions.,Entwicklung der Anzahl Arbeitsstellen in den grossen Berufsgruppen der Schweiz. Die Zahlen in Klammern entsprechen dem Unterschied von Stellen in % zwischen 1991 und 2015. Für Beispiele von Berufen: Fahren Sie mit dem Cursor über die Titel der Grafiken oder klicken Sie diese an.,Evoluzione del numero di impieghi per le grandi categorie professionali in Svizzera. Le cifre tra parentesi corrispondono alla differenza di posti di lavoro in % tra il 1991 e il 2015. Spostate il cursore o cliccate sui titoli dei grafici per vedere degli esempi di professione.,,تطور عدد الوظائف للمجموعات المهنية الرئيسية في سويسرا. تدل الأرقام بين قوسين على الفرق المُسجل في مواطن الشغل بالنسبة المئوية بين 1991 و2015. ضع المؤشر على عناوين الرسوم أو اضغط عليها لمشاهدة أمثلة عن المهن.,,,,
 source,Source,source,Quelle,Fonte,fonte,المصدر,Источник,Fuente,出典,来源
-source.name,,Office fédéral de la statistique ESPA,,,,,,,,
-source.link,,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100755.xls,,,,,,,,
+source.name,Federal Statistical Office,Office fédéral de la statistique ESPA,Bundesamt für Statistik BFS,Ufficio federale di statistica UST,,"المكتب الفدرالي للإحصاء
+",,,,
+source.link,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100755.xls,http://www.bfs.admin.ch/bfs/portal/fr/index/themen/03/02/blank/data/03.Document.100755.xls,http://www.bfs.admin.ch/bfs/portal/de/index/themen/03/02/blank/data/03.Document.100755.xls,http://www.bfs.admin.ch/bfs/portal/de/index/themen/03/02/blank/data/03.Document.100755.xls,http://www.bfs.admin.ch/bfs/portal/de/index/themen/03/02/blank/data/03.Document.100755.xls,http://www.bfs.admin.ch/bfs/portal/de/index/themen/03/02/blank/data/03.Document.100755.xls,http://www.bfs.admin.ch/bfs/portal/de/index/themen/03/02/blank/data/03.Document.100755.xls,http://www.bfs.admin.ch/bfs/portal/de/index/themen/03/02/blank/data/03.Document.100755.xls,http://www.bfs.admin.ch/bfs/portal/de/index/themen/03/02/blank/data/03.Document.100755.xls,http://www.bfs.admin.ch/bfs/portal/de/index/themen/03/02/blank/data/03.Document.100755.xls
 code,Code,code,Code,Codice,código,الرمز,Код,código,コード,代码
 code.name,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR,metricsgraphicsR
 code.link,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics,https://github.com/hrbrmstr/metricsgraphics
-agr.type,Skilled agricultural workers,"Agriculteurs, sylviculteurs",Fachkräfte in Land- und Forstwirtschaft,,,,,,,
-con.type,Machine operators and assemblers,Conducteurs et assembleurs,"Anlagen- und Maschinenbediener/innen, Montierer/innen",,,,,,,
-dir.type,Managers,Directeurs et cadres,Führungskräfte,,,,,,,
-adm.type,Clerical support workers,Employés administratifs,Bürokräfte und verwandte Berufe,,,,,,,
-art.type,Craft and related trades workers,Métiers de l’industrie et de l’artisanat,Handwerks- und verwandte Berufe,,,,,,,
-com.type,Service and sales workers,Services & commerçants,Dienstleistungsberufe und Verkäufer/innen,,,,,,,
-int.type,Professionals,Prof. intellectuelles et scientifiques,Akademische Berufe,,,,,,,
-ele.type,Elementary occupations,Professions non qualifiées,Hilfsarbeitskräfte  ,,,,,,,
-tmp.type,Technicians and associate professionals ,Professions techniques ou apparentées,Techniker/innen und gleichrangige Berufe,,,,,,,
-examples,,exemples,,,,,,,,
-agr.ex,,"Agriculteurs, sylviculteurs, pêcheurs, ...",,,,,,,,
-con.ex,,"Conducteurs de machines, monteurs, assembleurs, ...",,,,,,,,
-dir.ex,,"Cadres de direction, gérants, ...",,,,,,,,
-adm.ex,,"Secrétaires, guichetiers, ...",,,,,,,,
-art.ex,,"Maçons, charpentiers, bouchers, ...",,,,,,,,
-com.ex,,"Coiffeurs, cuisiniers, vendeurs, ...",,,,,,,,
-int.ex,,"Ingénieurs, infirmers, juristes, psychologues, ...",,,,,,,,
-ele.ex,,"Emplois peu qualifés dans l'agriculture, manufacture, ...",,,,,,,,
-tmp.ex,,"Techniciens, agents immobiliers, opticiens, ...",,,,,,,,
-x.label,,année,,,,,,,,
-y.label,,emplois,,,,,,,,
+agr.type,Skilled agricultural workers,"Agriculteurs, sylviculteurs",Fachkräfte in Land- und Forstwirtschaft,"Agricoltori, silvicoltori ",,مزارعون ومستغلو الغابات,,,,
+con.type,Machine operators and assemblers,Conducteurs et assembleurs,"Anlagen- und Maschinenbedienung, Montage","Conduttori di impianti, addetti al montaggio",,"مُشغلو آلات ومُجمِّعون
+",,,,
+dir.type,Managers,Directeurs et cadres,Führungskräfte,Direttori e quadri,,"مدراء وكوادر (أطر)
+
+",,,,
+adm.type,Clerical support workers,Employés administratifs,Bürokräfte und verwandte Berufe,Impiegati amministrativi,,"موظفون إداريون
+",,,,
+art.type,Craft and related trades workers,Métiers de l’industrie et de l’artisanat,Handwerks- und verwandte Berufe,Mestieri dell'industria e dell'artigianato,,"مهن صناعية وحرفية
+
+",,,,
+com.type,Service and sales workers,Services & commerçants,Dienstleistungsberufe und Verkauf,Servizi e commercianti,,"مُوفرو خدمات وتُجّار
+",,,,
+int.type,Professionals,Prof. intellectuelles et scientifiques,Akademische Berufe,Prof. intellettuali e scientifiche,,"مهن فكرية وعلمية
+
+",,,,
+ele.type,Elementary occupations,Professions non qualifiées,Hilfsarbeitskräfte,Professioni non qualificate,,"مهن غير مؤهلة
+
+",,,,
+tmp.type,Technicians and associate professionals ,Professions techniques ou apparentées,Techniker und gleichrangige Berufe,Professioni tecniche o simili,,"مهن تقنية أو شبيهة
+
+",,,,
+examples,Examples,exemples,Beispiele,esempi,,أمثلة,,,,
+agr.ex,"Farmers, forest workers, fishermen","Agriculteurs, sylviculteurs, pêcheurs, ...","Landwirt, Förster, Fischer, …","Agricoltori, silvicoltori, pescatori,...",,"مزارعون، مستغلو غابات، صيادون، ...
+",,,,
+con.ex,"Machine operators, assemblers, ","Conducteurs de machines, monteurs, assembleurs, ...","Mechaniker, Maschinist, Monteur, …","Conduttori di macchine, montatori, ",,"مُشغلو آلات، ميكانيكيون، مُجمّعون، ...
+
+",,,,
+dir.ex,"Managers, executives","Cadres de direction, gérants, ...","Kadermitarbeiter, Geschäftsführer, …","Quadri di direzione, gerenti",,أطر تنفيذية، ومُسيّرون،...,,,,
+adm.ex,"Secretaries, clerical workers","Secrétaires, guichetiers, ...","Sekretariat, Schalterbeamte, …","Segretari, sportellisti",,"أعمال سكرتارية وموظفون على الشباك،...
+
+",,,,
+art.ex,"Builder, carpenter, butcher","Maçons, charpentiers, bouchers, ...","Maurer, Zimmermann, Metzger, …","Muratori, carpentieri, macellai,...",,"بناؤون، نجارون، جزارون،...
+
+",,,,
+com.ex,"Hairdresser, cook, salesperson","Coiffeurs, cuisiniers, vendeurs, ...","Frisör, Koch, Verkäufer, …","Parrucchieri, cuochi, venditori,...",,"مصففو الشعر، طباخون، وباعة، ...
+
+",,,,
+int.ex,"Engineer, nurse, lawyer, psychologist","Ingénieurs, infirmers, juristes, psychologues, ...","Ingenieur, Pflege, Jurist, Psychologe, …","Ingegneri, infermieri, giuristi, psicologi,...",,مهندسون، ممرضون، قانونيون، علماء نفس،...,,,,
+ele.ex,"Farm worker, factory worker","Emplois peu qualifés dans l'agriculture, manufacture, ...","Hilfskraft in der Landwirtschaft, Handarbeit, …","Impieghi poco qualificati nell'agricoltura, manifattura,...",,"وظائف ضعيفة التأهيل في الزراعة والصناعة التحويلية.
+",,,,
+tmp.ex,"Technicians, estate agents,opticians","Techniciens, agents immobiliers, opticiens, ...","Techniker, Immobilienmakler, Optiker, …","Tecnici, agenti immobiliari, ottici,...",,"تقنيون، وكلاء عقاريون، نظاراتيون، ...
+
+",,,,
+x.label,Year,année,Jahr,anno,,السنة,,,,
+y.label,Jobs,emplois,Stellen,impieghi,,الوظائف,,,,

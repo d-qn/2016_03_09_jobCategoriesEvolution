@@ -148,9 +148,9 @@ if(length(cidx &gt; 0)) {
   warning(paste(colnames(txt)[cidx], collapse = &quot;\t&quot;), &quot; languages will be discarded!&quot;, &quot;\n&quot;)
   txt &lt;- txt[,-cidx, drop = F]
 }</code></pre>
-<pre><code>## Warning: EN  DE  IT  PT  AR  RU  ES  JA  ZH languages will be discarded!</code></pre>
+<pre><code>## Warning: PT  RU  ES  JA  ZH languages will be discarded!</code></pre>
 <pre class="r"><code>colnames(txt)</code></pre>
-<pre><code>## [1] &quot;FR&quot;</code></pre>
+<pre><code>## [1] &quot;EN&quot; &quot;FR&quot; &quot;DE&quot; &quot;IT&quot; &quot;AR&quot;</code></pre>
 <pre class="r"><code>data &lt;- data %&gt;% filter(profession  != &quot;Sans indication/ne sait pas&quot;) 
 job.type &lt;- sort(unique(data$profession))
 names(job.type) &lt;- rownames(txt)[grep(&quot;\\.type$&quot;, rownames(txt))]
@@ -302,9 +302,9 @@ library(metricsgraphics)</code></pre>
 <pre><code>## Warning: package 'metricsgraphics' was built under R version 3.2.3</code></pre>
 <pre class="r"><code>library(htmltools)</code></pre>
 <pre><code>## Warning: package 'htmltools' was built under R version 3.2.4</code></pre>
-<pre class="r"><code>lang &lt;- 'FR'
+<pre class="r"><code>#lang &lt;- 'FR'
 
-#for(lang in colnames(txt)) {
+for(lang in colnames(txt)) {
 
   dd &lt;- jobsy
   
@@ -373,9 +373,9 @@ library(metricsgraphics)</code></pre>
   original &lt;- list.files(&quot;js&quot;, &quot;metricsgraphics.css&quot;, full.names = T, recursive = T)
   file.copy(
     list.files(system.file(&quot;extdata&quot;, package=&quot;swiRcharts&quot;), 'metricsgraphics.css', full.names = T),
-    original, overwrite = T)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
-<pre class="r"><code>#}</code></pre>
+    original, overwrite = T)
+   
+}</code></pre>
 </div>
 
 

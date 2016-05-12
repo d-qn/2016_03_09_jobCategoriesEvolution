@@ -153,9 +153,9 @@ sum(jobsy.delta$abs.delta)
 library(metricsgraphics)
 library(htmltools)
 
-lang <- 'FR'
+#lang <- 'FR'
 
-#for(lang in colnames(txt)) {
+for(lang in colnames(txt)) {
 
   dd <- jobsy
   
@@ -226,6 +226,6 @@ lang <- 'FR'
     list.files(system.file("extdata", package="swiRcharts"), 'metricsgraphics.css', full.names = T),
     original, overwrite = T)
    
-#}
+}
 
 ```
