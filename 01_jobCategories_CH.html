@@ -147,10 +147,9 @@ cidx &lt;- unique(which(txt ==&quot;&quot; | is.na(txt), T)[,2])
 if(length(cidx &gt; 0)) {
   warning(paste(colnames(txt)[cidx], collapse = &quot;\t&quot;), &quot; languages will be discarded!&quot;, &quot;\n&quot;)
   txt &lt;- txt[,-cidx, drop = F]
-}</code></pre>
-<pre><code>## Warning: PT  RU  ES  JA  ZH languages will be discarded!</code></pre>
-<pre class="r"><code>colnames(txt)</code></pre>
-<pre><code>## [1] &quot;EN&quot; &quot;FR&quot; &quot;DE&quot; &quot;IT&quot; &quot;AR&quot;</code></pre>
+}
+colnames(txt)</code></pre>
+<pre><code>##  [1] &quot;EN&quot; &quot;FR&quot; &quot;DE&quot; &quot;IT&quot; &quot;PT&quot; &quot;AR&quot; &quot;RU&quot; &quot;ES&quot; &quot;JA&quot; &quot;ZH&quot;</code></pre>
 <pre class="r"><code>data &lt;- data %&gt;% filter(profession  != &quot;Sans indication/ne sait pas&quot;) 
 job.type &lt;- sort(unique(data$profession))
 names(job.type) &lt;- rownames(txt)[grep(&quot;\\.type$&quot;, rownames(txt))]
@@ -312,7 +311,7 @@ for(lang in colnames(txt)) {
   # get the translations
   dd$job.type &lt;- names(job.type)[match(dd$profession, job.type)]
   
-  axis.labels &lt;- c(txt['x.label', lang], txt['y.label', lang])
+  axis.labels &lt;- c(txt['x.label', lang], gsub(&quot; &quot;, &quot;_&quot;, txt['y.label', lang]))
   colnames(dd)[which(colnames(dd) == &quot;year&quot;)] &lt;- axis.labels[1]
   colnames(dd)[which(colnames(dd) == &quot;tot&quot;)] &lt;- axis.labels[2]
   

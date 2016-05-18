@@ -1,28 +1,28 @@
 code,EN,FR,DE,IT,PT,AR,RU,ES,JA,ZH
-main.title,Five million jobs should disappear in the next five years,5 millions d’emplois devraient disparaître ces 5 prochaines années,5 Millionen Jobs werden in den nächsten 5 Jahren voraussichtlich verschwinden,Nei prossimi cinque anni dovrebbero scomparire 5 milioni di impieghi,,"من المُتوقع أن تختفي 5 ملايين مواطن عمل في السنوات الخمس
+main.title,Five million jobs should disappear in the next five years,5 millions d’emplois devraient disparaître ces 5 prochaines années,5 Millionen Jobs werden in den nächsten 5 Jahren voraussichtlich verschwinden,Nei prossimi cinque anni dovrebbero scomparire 5 milioni di impieghi,5 milhões de empregos devem desaparecer nos próximos cinco anos,"من المُتوقع أن تختفي 5 ملايين مواطن عمل في السنوات الخمس
 المقبلة. 
 
-",,,,
-descr,"Changes for 2015-2020 period in thousands of jobs worldwide. The size of the bubble is proportionate to the employment forecasts by economic sector. Dark bubbles represent job losses, clear bubbles are new jobs.","Evolution pour la période 2015-2020, en milliers d’emplois dans le monde. La taille des bulles est proportionnelle aux prévisions d'emplois par branche économique. Les bulles sombres représentent les pertes d'emplois, les claires les augmentations.","Entwicklung im Zeitraum 2015-2020, in Tausend Angestellten weltweit. Die Grösse der Kreise ist proportional zu den Prognosen pro Wirtschaftszweig. Die dunklen Kreise bedeuten eine Abnahme, die hellen eine Zunahme.","Evoluzione per il periodo 2015-2020, in migliaia di impieghi nel mondo. La grandezza delle bolle è proporzionale alle previsioni a seconda dei settori economici. Le bolle più scure rappresentano una perdita di impieghi, quelle più chiare un aumento.",,"التطور المرتقب في الفترة ما بين 2015 و2020، بآلاف
+",В следующие 5 лет в мире исчезнет 5 млн рабочих мест,Cinco millones de empleos desaparecerán en el próximo quinquenio,今後５年間で５００万人が雇用喪失のおそれ,未来五年内500万个工作岗位将会消失
+descr,"Changes for 2015-2020 period in thousands of jobs worldwide. The size of the bubble is proportionate to the job forecasts by economic sector. Dark bubbles represent job losses, light bubbles are new jobs.","Evolution pour la période 2015-2020, en milliers d’emplois dans le monde. La taille des bulles est proportionnelle aux prévisions d'emplois par branche économique. Les bulles sombres représentent les pertes d'emplois, les claires les augmentations.","Entwicklung im Zeitraum 2015-2020, in Tausend Angestellten weltweit. Die Grösse der Kreise ist proportional zu den Prognosen pro Wirtschaftszweig. Die dunklen Kreise bedeuten eine Abnahme, die hellen eine Zunahme.","Evoluzione per il periodo 2015-2020, in migliaia di impieghi nel mondo. La grandezza delle bolle è proporzionale alle previsioni a seconda dei settori economici. Le bolle più scure rappresentano una perdita di impieghi, quelle più chiare un aumento.","Evolução para o período 2015-2020, em milhares de postos de trabalho em todo o mundo. O tamanho da bolha é proporcional à previsões de emprego por setor econômico. As bolhas escuras representam perda de emprego. Os claros, o crescimento. ","التطور المرتقب في الفترة ما بين 2015 و2020، بآلاف
 مواطن الشغل في جميع أنحاء العالم. حجم الفقاعة يتناسب مع توقعات التوظيف حسب القطاع
 الإقتصادي. تمثل الفقاعات الداكنة فقدان الوظائف، والفقاعات الفاتحة زيادة فرص
 العمل.
 
-",,,,
+","График показывает предположительную структурную эволюцию отношений занятости в мире, в период с 2015 по 2020 гг. Радиус каждой окружности пропорционален прогнозу по данной отрасли. Темный цвет означает уменьшение числа рабочих мест, светлый оттенок — увеличение.","Evolución entre 2015 y 2020, en miles de empleos en el mundo. El tamaño de las burbujas es proporcional a las previsiones de empleo por sector. Las burbujas oscuras representan las pérdidas en empleos; las claras, los ingrementos.",２０１５～２０年における雇用の動向予想（単位：１千人）。円の大きさは、各セクターの予想雇用者数に比例する。濃い色の円は雇用者数が減ると予想されるセクター、明るい色の円は増えると予想される部門。,2015-2020年间世界各地工作岗位数量变化(单位：千个)。圆圈大小与行业的职业预测情况成正比。深色圆圈代表工作岗位的减少，浅色圆圈代表新的工作岗位。
 source,Source,source,Quelle,Fonte,fonte,المصدر,Источник,Fuente,出典,来源
-source.name,World Economic Forum - The Future of Jobs Report,World Economic Forum - The Future of Jobs Report,World Economic Forum - The Future of Jobs Report,World Economic Forum - The Future of Jobs Report,,المنتدى الإقتصادي العالمي - تقرير مستقبل الوظائف,,,,
+source.name,World Economic Forum - The Future of Jobs Report,World Economic Forum - The Future of Jobs Report,World Economic Forum - The Future of Jobs Report,World Economic Forum - The Future of Jobs Report,World Economic Forum - The Future of Jobs Report,المنتدى الإقتصادي العالمي - تقرير مستقبل الوظائف,World Economic Forum - The Future of Jobs Report,Foro Económico Mundial - Informe 'El futuro del empleo' ,世界経済フォーラム（WEF)「仕事の未来（The Future of Jobs)」,世界经济论坛-未来工作岗位报告
 source.link,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/,http://reports.weforum.org/future-of-jobs-2016/
 code,Code,code,Code,Codice,código,الرمز,Код,código,コード,代码
 code.name,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR,BubblesR
-l1.eco,Administrative sector,Secteur administratif,Verwaltung,Settore amministrativo,,القطاع الإداري,,,,
-l2.eco,Industry,Industrie,Industrie,Industria,,الصناعة,,,,
-l3.eco,Construction,Construction,Bau,Edilizia,,البناء,,,,
-l4.eco,Arts and media,Arts & médias,Kunst & Medien,Arti e media,,الفنون والإعلام,,,,
-l5.eco,Law,Droit,Recht,Diritto,,القانون,,,,
-l6.eco,Machines,Machine,Maschinenbau,Macchine,,الآلات,,,,
-g1.eco,Finance,Finance,Finanzen,Finanze,,المالية,,,,
-g2.eco,Management,Management,Management,Management,,التسيير,,,,
-g3.eco,IT,Informatique,Datenverarbeitung,Informatica,,معالجة المعلومات,,,,
-g4.eco,Engineering,Ingénierie,Ingenieurwesen,Ingegneria,,الهندسة,,,,
-g5.eco,Sales,Ventes,Verkauf,Vendita,,المبيعات,,,,
-g6.eco,Education,Education,Bildung,Educazione,,التربية,,,,
+l1.eco,Administrative sector,Secteur administratif,Verwaltung,Settore amministrativo,Administração,القطاع الإداري,Управление,Administración,事務,行政领域
+l2.eco,Industry,Industrie,Industrie,Industria,Indústria,الصناعة,Промышленность,Industria,製造,工业
+l3.eco,Construction,Construction,Bau,Edilizia,Construção,البناء,Строительство,Construcción,建設,建筑
+l4.eco,Arts and media,Arts & médias,Kunst & Medien,Arti e media,Artes e mídias,الفنون والإعلام,Искусство и СМИ,Artes y medios,芸術＆メディア,艺术与媒体
+l5.eco,Law,Droit,Recht,Diritto,Direito,القانون,Право,Derecho,法律,法律
+l6.eco,Machines,Machine,Maschinenbau,Macchine,Máquinos,الآلات,Машиностроение,Maquinaria,機械,机械
+g1.eco,Finance,Finance,Finanzen,Finanze,Finanças,المالية,Финансы,Finazas,金融,金融
+g2.eco,Management,Management,Management,Management,Management,التسيير,Менеджмент,Administración,経営・管理,管理
+g3.eco,IT,Informatique,Datenverarbeitung,Informatica,Informática,معالجة المعلومات,Обработка данных,Informática,情報処理,信息
+g4.eco,Engineering,Ingénierie,Ingenieurwesen,Ingegneria,Engenharia,الهندسة,Инженерные специальности,Ingeniería,エンジニアリング,工程
+g5.eco,Sales,Ventes,Verkauf,Vendita,Vendas,المبيعات,Продажи,Ventas,販売,销售
+g6.eco,Education,Education,Bildung,Educazione, Educação,التربية,Образование,Educación,教育,教育

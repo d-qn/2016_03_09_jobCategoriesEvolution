@@ -163,7 +163,7 @@ for(lang in colnames(txt)) {
   # get the translations
   dd$job.type <- names(job.type)[match(dd$profession, job.type)]
   
-  axis.labels <- c(txt['x.label', lang], txt['y.label', lang])
+  axis.labels <- c(txt['x.label', lang], gsub(" ", "_", txt['y.label', lang]))
   colnames(dd)[which(colnames(dd) == "year")] <- axis.labels[1]
   colnames(dd)[which(colnames(dd) == "tot")] <- axis.labels[2]
   

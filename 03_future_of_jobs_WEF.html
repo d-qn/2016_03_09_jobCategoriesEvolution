@@ -80,10 +80,10 @@ if(length(cidx &gt; 0)) {
   warning(paste(colnames(txt)[cidx], collapse = &quot;\t&quot;), &quot; languagues will be discarded!&quot;, &quot;\n&quot;)
   txt &lt;- txt[,-cidx, drop = F]
   colnames(txt)
-}</code></pre>
-<pre><code>## Warning: PT  RU  ES  JA  ZH languagues will be discarded!</code></pre>
-<pre><code>## [1] &quot;EN&quot; &quot;FR&quot; &quot;DE&quot; &quot;IT&quot; &quot;AR&quot;</code></pre>
-<pre class="r"><code># data based on WEF The Future of Jobs
+}
+
+
+# data based on WEF The Future of Jobs
 ne &lt;- data.frame(
   value = c(4759, 1609, 497, 151, 109, 40),
   key = c(&quot;l1.eco&quot;, &quot;l2.eco&quot;, &quot;l3.eco&quot;, &quot;l4.eco&quot;, &quot;l5.eco&quot;, &quot;l6.eco&quot;),
