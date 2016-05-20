@@ -1,6 +1,6 @@
 ## Job 4.0
 
-This repository contains all the R code used for [this data-driven story]()
+This repository contains all the R code used for [this data-driven story](http://www.swissinfo.ch/eng/employment-4.0_the-mutation-of-the-workforce-has-already-begun/42160060)
 
 
 ### Exclusion of liability
